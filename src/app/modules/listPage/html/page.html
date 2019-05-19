@@ -1,0 +1,178 @@
+<!-- List Page -->
+<div id="ListPage"
+  layout="row"
+  flex>
+  <div layout="column"
+    flex>
+
+    <!-- List Header -->
+    <md-toolbar class="page-header">
+      <div class="md-toolbar-tools">
+
+        <!-- Back Button -->
+        <md-button class="back-button md-icon-button"
+          ng-click="$listPage.navToParent()">
+          <md-icon class="material-icons">
+            chevron_left
+          </md-icon>
+        </md-button>
+
+        <!-- List Title -->
+        <h1>{{ $listPage.list.Title }}</h1>
+
+        <span flex></span>
+
+        <!-- Add Item Button -->
+        <md-button class="md-raised md-primary"
+          ng-click="$listPage.createItem()">
+
+          <!-- Icon -->
+          <md-icon class="material-icons">
+            create
+          </md-icon>
+
+          <!-- Text -->
+          <span>Add Item</span>
+
+        </md-button>
+
+        <md-menu class="list-tools">
+          <!-- trigger -->
+          <md-button class="menu-toggle md-icon-button"
+            aria-label="Open Settings"
+            ng-click="openMenu($mdMenu.open, $event)">
+            <md-icon class="material-icons">
+              settings_cog
+            </md-icon>
+          </md-button>
+          <!-- content -->
+          <md-menu-content width="4">
+            <md-menu-item>
+              <md-button ng-click="$listPage.renameList($event)">
+                <md-icon>edit</md-icon>
+                Rename List
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button ng-click="$listPage.deleteList($event)">
+                <md-icon>delete</md-icon>
+                Delete List
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+
+      </div>
+    </md-toolbar>
+
+    <!-- List Content -->
+    <main layout="column"
+      flex>
+
+      <!-- No List Items Yet ... Section -->
+      <section id="NoListItems"
+        ng-if="$listPage.completedItems.length === 0 && $listPage.todoItems.length ===0"
+        layout="column"
+        flex>
+        <div class="create-list"
+          layout="column"
+          layout-align="center center"
+          flex>
+          <span flex></span>
+          <span class="placeholder-text">No items yet ...</span>
+          <md-button class="md-raised md-primary"
+            ng-click="$listPage.createItem()">
+            <md-icon class="material-icons">
+              create
+            </md-icon>
+            Create one
+          </md-button>
+          <span flex></span>
+        </div>
+      </section>
+
+      <!-- List Items Todo Section -->
+      <section class="list"
+        id="TodoItems">
+
+        <!-- List Items -->
+        <ol class="items todo">
+
+          <!-- List Item -->
+          <li ng-repeat="list in $listPage.todoItems | orderBy: 'Created'"
+            ng-class="{'completed': list.Completed !== null}"
+            layout="row">
+
+            <!-- List Item Check Box -->
+            <div class="check-box">
+              <md-button class="md-icon-button"
+                ng-click="$listPage.toggleComplete(list)">
+                <md-icon class="material-icons">
+                  {{ null === list.Completed ? 'check_box_outline_blank' : 'check_box' }}
+                </md-icon>
+              </md-button>
+            </div>
+
+            <!-- List Item Text -->
+            <div class="item-text"
+              layout="column"
+              layout-align="center start">
+              <a ui-sref="app.user.listPage({ listId: list.Id })">
+                {{ list.Title }}
+              </a>
+            </div>
+
+          </li>
+
+        </ol>
+
+      </section>
+
+      <!-- List Items Completed Section -->
+      <section class="list"
+        id="CompletedItems"
+        ng-if="$listPage.completedItems.length > 0">
+
+        <!-- Section Header -->
+        <header>
+          <h2>Completed</h2>
+        </header>
+
+        <!-- List Items -->
+        <ol class="items completed">
+
+          <!-- List Item -->
+          <li ng-repeat="list in $listPage.completedItems | orderBy: 'Created'"
+            ng-class="{'completed': list.Completed !== null}"
+            layout="row">
+
+            <!-- List Item Check Box -->
+            <div class="check-box">
+              <md-button class="md-icon-button"
+                ng-click="$listPage.toggleComplete(list)">
+                <md-icon class="material-icons">
+                  {{ null === list.Completed ? 'check_box_outline_blank' : 'check_box' }}
+                </md-icon>
+              </md-button>
+            </div>
+
+            <!-- List Item Text -->
+            <div class="item-text"
+              layout="column"
+              layout-align="center start">
+              <a ui-sref="app.user.listPage({ listId: list.Id })">
+                {{ list.Title }}
+              </a>
+            </div>
+
+          </li>
+
+        </ol>
+
+      </section>
+
+    </main>
+
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<div id="signup" layout layout-fill layout-align="center center">
+  <div class="signup-form form-wrapper" layout="column" md-whiteframe="12dp">
+
+    <header layout="row" layout-align="start center">
+
+      <img src="logo.png" class="app-logo" />
+
+      <div flex layout="column">
+        <span class="md-caption">MyMoney</span>
+        <span class="md-headline">User Signup</span>
+      </div>
+
+    </header>
+
+    <form name="signupForm" layout="column" ng-submit="submit($event)"
+      ng-controller="SignupController">
+
+      <md-content layout="column">
+
+        <md-input-container>
+          <label>Email Address</label>
+          <input name="emailAddress"
+            ng-model="newUser.EmailAddress"
+            required
+            type="email"
+            ng-disabled="inputDisabled" />
+          <div ng-messages="signupForm.emailAddress.$error">
+            <div ng-message="required">A valid email address is required.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container>
+          <label>Password</label>
+          <input name="password"
+            ng-model="newUser.Password"
+            required
+            type="password"
+            ng-pattern="/^.{7,}$/"
+            ng-disabled="inputDisabled" />
+          <div ng-messages="signupForm.password.$error"
+            md-auto-hide="true"
+            multiple>
+            <div ng-message="required">Password is required.</div>
+            <div ng-message="pattern">Password must be at least 7 characters.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container>
+          <label>Confirm Password</label>
+          <input name="passwordConfirmation"
+            ng-model="passwordConfirmation"
+            ng-disabled="inputDisabled"
+            type="password"
+            must-match="newUser.Password"
+            required />
+          <div ng-messages="signupForm.passwordConfirmation.$error"
+            md-auto-hide="true"
+            multiple>
+            <div ng-message="required">Please re-enter your password.</div>
+            <div ng-message="mustMatch">Passwords must match.</div>
+          </div>
+        </md-input-container>
+
+        <div>
+          <md-checkbox
+            ng-model="touAccepted"
+            aria-label="I have read and agree to the Terms of Use and Privacy Policy"
+            ng-true-value="true"
+            ng-false-value="false"
+            class="md-align-top-left" flex>
+            I have read and agree to the
+            <a href ng-click="showLegal($event, 'termsOfUse')">Terms of Use</a>
+            and
+            <a href ng-click="showLegal($event, 'privacyPolicy')">Privacy Policy</a>
+          </md-checkbox>
+        </div>
+
+      </md-content>
+
+      <div class="submit-row" layout="row" layout-align="end center">
+        <md-button class="md-primary md-raised" type="submit" ng-disabled="!touAccepted || submitDisabled">
+          Create my account
+        </md-button>
+      </div>
+
+      <md-progress-linear md-mode="indeterminate" ng-if="showProgress"></md-progress-linear>
+
+    </form>
+
+  </div>
+</div>

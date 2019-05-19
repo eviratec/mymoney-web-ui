@@ -1,0 +1,169 @@
+<md-sidenav class="md-sidenav-left md-whiteframe-z2"
+  layout="column"
+  md-theme="sidenavTheme"
+  md-component-id="left"
+  md-is-locked-open="$mdMedia('gt-md')">
+
+  <div ng-controller="SidenavController as $sidenav"
+    ng-cloak>
+
+    <header layout="row" layout-align="start center">
+
+      <img src="logo.png" class="app-logo" />
+
+      <div flex layout="column">
+        <span class="md-headline">MyMoney</span>
+        <span class="md-caption">eviratec.software</span>
+      </div>
+
+    </header>
+
+    <md-list>
+      <md-list-item ui-sref="app.user.dashboard"
+        ng-click="toggleSidenav('left')">
+        <md-icon class="material-icons">
+          apps
+        </md-icon>
+        <p>Dashboard</p>
+      </md-list-item>
+
+      <md-divider></md-divider>
+
+      <md-subheader ng-click="showSidenavApps=!showSidenavApps">
+        My Categories
+      </md-subheader>
+
+      <md-list-item ui-sref-active="active"
+        ui-sref="app.user.categoryPage({ categoryId: category.Id })"
+        ng-repeat="category in categories | orderBy: 'Name'"
+        ng-if="showSidenavCategories"
+        ng-click="toggleSidenav('left')">
+        <md-icon class="material-icons">
+          folder
+        </md-icon>
+        <p>{{ category.Name }}</p>
+      </md-list-item>
+
+      <md-list-item
+        ng-click="createCategory()"
+        ng-if="showSidenavCategories"
+        ng-click="toggleSidenav('left')">
+        <md-icon class="material-icons">
+          create
+        </md-icon>
+        <p>Create a Category</p>
+      </md-list-item>
+
+    </md-list>
+  </div>
+</md-sidenav>
+
+<div class="relative"
+  layout="column"
+  role="main"
+  ng-controller="LayoutController"
+  layout-fill
+  ng-cloak>
+  <md-toolbar id="userToolbar">
+    <div class="md-toolbar-tools">
+
+      <img class="logo"
+        src="logo.png" />
+
+      <h3 class="md-caption"
+        ng-if="$mdMedia('gt-xs')">
+        MyMoney
+      </h3>
+
+      <span flex></span>
+
+      <md-menu class="hide-gt-xs">
+        <!-- trigger -->
+        <md-button class="md-icon-button"
+          aria-label="Open Settings"
+          ng-click="openMenu($mdMenu.open, $event)">
+          <md-icon class="material-icons">
+            person
+          </md-icon>
+          <md-icon class="material-icons">
+            arrow_drop_down
+          </md-icon>
+        </md-button>
+        <!-- content -->
+        <md-menu-content width="4">
+          <md-menu-item>
+              <span class="user-displayname">
+                {{ login }}
+              </span>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item>
+            <md-button ng-click="logout()">
+              <md-icon>power_settings_new</md-icon>
+              Logout
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+
+      <md-menu class="hide-xs">
+        <!-- trigger -->
+        <md-button
+          aria-label="Open Settings"
+          ng-click="openMenu($mdMenu.open, $event)">
+          <md-icon class="material-icons">
+            person
+          </md-icon>
+          <span class="user-displayname md-caption">
+            {{ login }}
+          </span>
+          <md-icon class="material-icons">
+            arrow_drop_down
+          </md-icon>
+        </md-button>
+        <!-- content -->
+        <md-menu-content width="4">
+          <!-- <md-menu-item>
+            <md-button ng-click="changeProfile($event)">
+              <md-icon>face</md-icon>
+              Profile
+            </md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button ng-click="changePassword()">
+              <md-icon>lock</md-icon>
+              Password
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider> -->
+          <md-menu-item>
+            <md-button ng-click="logout()">
+              <md-icon>power_settings_new</md-icon>
+              Logout
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+
+      <md-button class="md-icon-button"
+        aria-label="Menu"
+        ng-click="toggleSidenav('left')"
+        hide-gt-md>
+        <md-icon class="material-icons">
+          menu
+        </md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-content class="ds-main-content"
+    layout="column"
+    md-scroll-y
+    flex>
+    <div layout="column"
+      layout-fill
+      ui-view>
+    </div>
+  </md-content>
+
+</div>

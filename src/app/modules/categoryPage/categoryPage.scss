@@ -1,0 +1,55 @@
+/**
+ * Copyright (c) 2019 Callan Peter Milne
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+#CategoryPage {
+
+  md-toolbar.page-header {
+    background-color: #222;
+  }
+  section.lists {
+
+    margin-bottom: 16px;
+
+    footer {
+      padding: 16px;
+    }
+    ul.lists {
+      border-top: 1px solid rgba(0,0,0,0.12);
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      background-color: rgba(255,255,255,0.5);
+      li {
+        border-bottom: 1px solid rgba(0,0,0,0.12);
+        a {
+          line-height: 64px;
+          display: block;
+          padding: 0 24px;
+          color: rgba(0,0,0,0.87);
+          text-decoration: none;
+          md-icon {
+            margin-right: 24px;
+          }
+          span.list-title {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+  }
+
+}

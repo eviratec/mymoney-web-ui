@@ -1,0 +1,94 @@
+<!-- Category Page -->
+<div id="CategoryPage"
+  layout="row"
+  flex>
+  <div layout="column"
+    flex>
+
+    <!-- Category Header -->
+    <md-toolbar class="page-header">
+      <div class="md-toolbar-tools">
+
+        <!-- Category Title -->
+        <h1>{{ $categoryPage.category.Name }}</h1>
+
+        <span flex></span>
+
+        <md-menu class="category-tools">
+          <!-- trigger -->
+          <md-button class="menu-toggle md-icon-button"
+            aria-label="Open Settings"
+            ng-click="openMenu($mdMenu.open, $event)">
+            <md-icon class="material-icons">
+              settings_cog
+            </md-icon>
+          </md-button>
+          <!-- content -->
+          <md-menu-content width="4">
+            <md-menu-item>
+              <md-button ng-click="$categoryPage.renameCategory($event)">
+                <md-icon>edit</md-icon>
+                Rename Category
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button ng-click="$categoryPage.deleteCategory($event)">
+                <md-icon>delete</md-icon>
+                Delete Category
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+
+      </div>
+    </md-toolbar>
+
+    <!-- Category Content -->
+    <main>
+
+      <!-- Category Lists Section -->
+      <section class="lists">
+
+        <!-- Category Lists -->
+        <ul class="lists">
+
+          <!-- List -->
+          <li ng-repeat="list in $categoryPage.category.Lists | orderBy: 'Created'">
+            <a ui-sref="app.user.listPage({ listId: list.Id })"
+              layout="row"
+              flex>
+              <md-icon class="material-icons">
+                list_alt
+              </md-icon>
+              <span class="list-title">{{ list.Title }}</span>
+            </a>
+          </li>
+
+        </ul>
+
+        <!-- Section Footer -->
+        <footer>
+
+          <!-- Create A New List Button -->
+          <md-button class="md-raised md-primary"
+            ng-click="$categoryPage.createList()">
+
+            <!-- Icon -->
+            <md-icon class="material-icons">
+              create
+            </md-icon>
+
+            <!-- Text -->
+            <span>Create a new list</span>
+
+          </md-button>
+
+        </footer>
+
+      </section>
+
+    </main>
+
+  </div>
+</div>

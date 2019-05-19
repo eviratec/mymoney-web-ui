@@ -1,0 +1,7 @@
+.tmp/
+build/
+node_modules/
+npm-debug.log
+.vagrant/
+*.log
+.DS_Store
