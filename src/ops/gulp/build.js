@@ -21,6 +21,6 @@ module.exports = function (gulp) {
       .pipe(gulp.dest('build'));
   });
 
-  gulp.task('build', [ 'vendorjscompile', 'tplcachecompile', 'jscompile', 'jsmin', 'csscompile', 'copystatic' ]);
+  gulp.task('build', [ 'vendorjscompile', 'tplcachecompile', 'jscompile', 'csscompile', 'copystatic', 'jsmin' ]);
 
 };

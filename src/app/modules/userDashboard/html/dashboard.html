@@ -11,7 +11,7 @@
         layout-align="start center">
         <md-card-header-text>
           <span class="md-headline">
-            List Categories
+            List Logbooks
           </span>
         </md-card-header-text>
       </div>
@@ -20,46 +20,43 @@
         layout-xs="column"
         layout-wrap>
         <div flex-gt-xs="33"
-          ng-repeat="category in categories | orderBy: 'Name'">
+          ng-repeat="logbook in logbooks | orderBy: 'Name'">
           <md-card>
-            <md-card-header ui-sref="app.user.categoryPage({ categoryId: category.Id })">
+            <md-card-header ui-sref="app.user.logbookPage({ logbookId: logbook.Id })">
               <md-card-avatar>
-                <md-icon ng-if="!category.IconUrl"
-                  class="material-icons">
+                <md-icon class="material-icons">
                   webui
                 </md-icon>
-                <img ng-if="category.IconUrl"
-                  src="{{ category.IconUrl }}" />
               </md-card-avatar>
               <md-card-header-text>
-                <span class="md-title">{{ category.Name }}</span>
-                <span class="md-subhead">MyMoney Category</span>
+                <span class="md-title">{{ logbook.Name }}</span>
+                <span class="md-subhead">MyMoney Logbook</span>
               </md-card-header-text>
             </md-card-header>
             <md-divider></md-divider>
             <md-card-actions layout="row"
               layout-align="end center">
               <md-button class="md-primary"
-                ui-sref="app.user.categoryPage({ categoryId: category.Id })">
+                ui-sref="app.user.logbookPage({ logbookId: logbook.Id })">
                 <md-icon class="material-icons">
                   edit
                 </md-icon>
-                Manage Lists
+                Manage Transactions
               </md-button>
             </md-card-actions>
           </md-card>
         </div>
         <div flex-gt-xs="33">
-          <div class="create-category-card"
+          <div class="create-logbook-card"
             layout="column"
             layout-align="center center">
-            <span>New category?</span>
+            <span>New logbook?</span>
             <md-button class="md-raised md-primary"
-              ng-click="createCategory()">
+              ng-click="createLogbook()">
               <md-icon class="material-icons">
                 create
               </md-icon>
-              Create a new category
+              Create a new logbook
             </md-button>
           </div>
         </div>

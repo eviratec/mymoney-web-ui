@@ -1,0 +1,88 @@
+<!-- Transaction Page -->
+<div id="TransactionPage"
+  layout="row"
+  flex>
+  <div layout="column"
+    flex>
+
+    <!-- Transaction Header -->
+    <md-toolbar class="page-header">
+      <div class="md-toolbar-tools">
+
+        <!-- Back Button -->
+        <md-button class="back-button md-icon-button"
+          ng-click="$transactionPage.navToParent()">
+          <md-icon class="material-icons">
+            chevron_left
+          </md-icon>
+        </md-button>
+
+        <!-- Transaction Title -->
+        <h1>{{ $transactionPage.transaction.Title }}</h1>
+
+        <span flex></span>
+
+        <md-menu class="transaction-tools">
+          <!-- trigger -->
+          <md-button class="menu-toggle md-icon-button"
+            aria-label="Open Settings"
+            ng-click="openMenu($mdMenu.open, $event)">
+            <md-icon class="material-icons">
+              settings_cog
+            </md-icon>
+          </md-button>
+          <!-- content -->
+          <md-menu-content width="4">
+            <md-menu-item>
+              <md-button ng-click="$transactionPage.changeSummary($event)">
+                <md-icon>edit</md-icon>
+                Change Summary
+              </md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button ng-click="$transactionPage.changeAmount($event)">
+                <md-icon>edit</md-icon>
+                Change Amount
+              </md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button ng-click="$transactionPage.changeOccurred($event)">
+                <md-icon>edit</md-icon>
+                Change Date
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button ng-click="$transactionPage.deleteTransaction($event)">
+                <md-icon>delete</md-icon>
+                Delete Transaction
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+
+      </div>
+    </md-toolbar>
+
+    <!-- Transaction Content -->
+    <main layout="column"
+      flex>
+
+      <!-- No Transaction Details Yet ... Section -->
+      <section id="NoTransactionDetails"
+        layout="column"
+        flex>
+        <div class="add-details"
+          layout="column"
+          layout-align="center center"
+          flex>
+          <span flex></span>
+          <span class="placeholder-text">No details yet ...</span>
+          <span flex></span>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+</div>

@@ -14,7 +14,7 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-angular.module('MyMoneyWebui.CategoryPage', [
+angular.module('MyMoneyWebui.LogbookPage', [
   'ngAnimate',
   'ngAria',
   'ngCookies',

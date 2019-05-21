@@ -14,29 +14,42 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-angular.module('MyMoneyWebui.ListPage')
-  .config(['$stateProvider', function ($stateProvider) {
+#LogbookPage {
 
-    $stateProvider
+  md-toolbar.page-header {
+    background-color: #222;
+  }
+  section.transactions {
 
-      .state('app.user.listPage', {
-        url: '/list/:listId',
-        templateUrl: 'modules/listPage/html/page.html',
-        controller: 'ListPageController',
-        controllerAs: '$listPage',
-        resolve: {
-          list: ['$api', '$stateParams', function ($api, $stateParams) {
-            let listId = $stateParams.listId;
-            return $api.apiGet(`/list/${listId}`)
-              .then(function (res) {
-                return res.data;
-              })
-              .catch(function (err) {
-                console.log(err);
-                return {};
-              });
-          }],
-        },
-      });
+    margin-bottom: 16px;
 
-}]);
+    footer {
+      padding: 16px;
+    }
+    ul.transactions {
+      border-top: 1px solid rgba(0,0,0,0.12);
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      background-color: rgba(255,255,255,0.5);
+      li {
+        border-bottom: 1px solid rgba(0,0,0,0.12);
+        a {
+          line-height: 64px;
+          display: block;
+          padding: 0 24px;
+          color: rgba(0,0,0,0.87);
+          text-decoration: none;
+          md-icon {
+            margin-right: 24px;
+          }
+          span.transaction-title {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+  }
+
+}

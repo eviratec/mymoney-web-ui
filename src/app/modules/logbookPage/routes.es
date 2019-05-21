@@ -14,20 +14,20 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-angular.module('MyMoneyWebui.CategoryPage')
+angular.module('MyMoneyWebui.LogbookPage')
   .config(['$stateProvider', function ($stateProvider) {
 
     $stateProvider
 
-      .state('app.user.categoryPage', {
-        url: '/category/:categoryId',
-        templateUrl: 'modules/categoryPage/html/page.html',
-        controller: 'CategoryPageController',
-        controllerAs: '$categoryPage',
+      .state('app.user.logbookPage', {
+        url: '/logbook/:logbookId',
+        templateUrl: 'modules/logbookPage/html/page.html',
+        controller: 'LogbookPageController',
+        controllerAs: '$logbookPage',
         resolve: {
-          category: ['$api', '$stateParams', function ($api, $stateParams) {
-            let categoryId = $stateParams.categoryId;
-            return $api.apiGet(`/category/${categoryId}`)
+          logbook: ['$api', '$stateParams', function ($api, $stateParams) {
+            let logbookId = $stateParams.logbookId;
+            return $api.apiGet(`/logbook/${logbookId}`)
               .then(function (res) {
                 return res.data;
               })

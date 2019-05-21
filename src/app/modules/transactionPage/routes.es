@@ -14,40 +14,27 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-angular.module('MyMoneyWebui.User')
+angular.module('MyMoneyWebui.TransactionPage')
   .config(['$stateProvider', function ($stateProvider) {
 
     $stateProvider
 
-      .state('app.user', {
-        templateUrl: 'modules/user/html/root.html',
-        controller: 'UserController',
-        controllerAs: '$user',
-        abstract: true,
+      .state('app.user.transactionPage', {
+        url: '/transaction/:transactionId',
+        templateUrl: 'modules/transactionPage/html/page.html',
+        controller: 'TransactionPageController',
+        controllerAs: '$transactionPage',
         resolve: {
-          userLogbooks: ['$api', function ($api) {
-            return $api.apiGet('/logbooks/all')
+          transaction: ['$api', '$stateParams', function ($api, $stateParams) {
+            let transactionId = $stateParams.transactionId;
+            return $api.apiGet(`/transaction/${transactionId}`)
               .then(function (res) {
                 return res.data;
               })
               .catch(function (err) {
                 console.log(err);
-                return [];
+                return {};
               });
-          }],
-          user: ['$auth', '$api', '$state', function ($auth, $api, $state) {
-            try {
-              return $api.apiGet(`/user/${$auth.user.Id}`)
-                .then(function (res) {
-                  return res.data;
-                })
-                .catch(function (err) {
-                  $state.go('app.anon.login');
-                });
-            }
-            catch (err) {
-              $state.go('app.anon.login');
-            }
           }],
         },
       });

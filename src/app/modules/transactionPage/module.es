@@ -14,42 +14,12 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-#CategoryPage {
-
-  md-toolbar.page-header {
-    background-color: #222;
-  }
-  section.lists {
-
-    margin-bottom: 16px;
-
-    footer {
-      padding: 16px;
-    }
-    ul.lists {
-      border-top: 1px solid rgba(0,0,0,0.12);
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      background-color: rgba(255,255,255,0.5);
-      li {
-        border-bottom: 1px solid rgba(0,0,0,0.12);
-        a {
-          line-height: 64px;
-          display: block;
-          padding: 0 24px;
-          color: rgba(0,0,0,0.87);
-          text-decoration: none;
-          md-icon {
-            margin-right: 24px;
-          }
-          span.list-title {
-            text-decoration: underline;
-          }
-        }
-      }
-    }
-
-  }
-
-}
+angular.module('MyMoneyWebui.TransactionPage', [
+  'ngAnimate',
+  'ngAria',
+  'ngCookies',
+  'ngMaterial',
+  'ngMessages',
+  'ui.router',
+  'luminous.environment',
+]);

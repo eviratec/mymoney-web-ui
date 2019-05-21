@@ -25,6 +25,6 @@ angular.module('MyMoneyWebui', [
   'MyMoneyWebui.Api',
   'MyMoneyWebui.Anon',
   'MyMoneyWebui.User',
-  'MyMoneyWebui.CategoryPage',
-  'MyMoneyWebui.ListPage',
+  'MyMoneyWebui.LogbookPage',
+  'MyMoneyWebui.TransactionPage',
 ]);

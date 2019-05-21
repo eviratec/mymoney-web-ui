@@ -17,8 +17,8 @@
 angular.module('MyMoneyWebui.User')
   .controller('UserController', UserController);
 
-UserController.$inject = ['$api', '$scope', '$rootScope', '$auth', '$state', '$mdDialog', '$timeout', 'user', 'userCategories'];
-function UserController (  $api,   $scope,   $rootScope,   $auth,   $state,   $mdDialog,   $timeout,   user,   userCategories) {
+UserController.$inject = ['$api', '$scope', '$rootScope', '$auth', '$state', '$mdDialog', '$timeout', 'user', 'userLogbooks'];
+function UserController (  $api,   $scope,   $rootScope,   $auth,   $state,   $mdDialog,   $timeout,   user,   userLogbooks) {
 
   $rootScope.$on('unauthorized', () => {
     $state.go('app.anon.login');
@@ -28,64 +28,64 @@ function UserController (  $api,   $scope,   $rootScope,   $auth,   $state,   $m
     $state.go('app.anon.login');
   }
 
-  $scope.showSidenavCategories = true;
-  $scope.categories = userCategories;
+  $scope.showSidenavLogbooks = true;
+  $scope.logbooks = userLogbooks;
   $scope.user = user;
 
   $scope.login = user.Login;
 
-  $scope.$on(`category:renamed`, updateCategoryName);
+  $scope.$on(`logbook:renamed`, updateLogbookName);
 
-  $scope.createCategory = function ($event) {
+  $scope.createLogbook = function ($event) {
 
     var confirm = $mdDialog.prompt()
-      .title('Name your new category')
-      .placeholder('My Category')
-      .ariaLabel('Category name')
+      .title('Name your new logbook')
+      .placeholder('My Logbook')
+      .ariaLabel('Logbook name')
       .initialValue('')
       .targetEvent($event)
-      .ok('Create Category')
+      .ok('Create Logbook')
       .cancel('Cancel');
 
     $mdDialog.show(confirm).then(function(result) {
-      createCategory(result);
+      createLogbook(result);
     }, function() {
 
     });
 
   };
 
-  function createCategory (name) {
+  function createLogbook (name) {
 
-    let newCategory = {
+    let newLogbook = {
       Name: name,
     };
 
-    $api.apiPost('/categories', newCategory)
+    $api.apiPost('/logbooks', newLogbook)
       .then(function (res) {
         $timeout(function () {
-          Object.assign(newCategory, res.data);
-          newCategory.Id = res.data.Id;
+          Object.assign(newLogbook, res.data);
+          newLogbook.Id = res.data.Id;
         });
       })
       .catch(function (err) {
         console.log(err);
       });
 
-    $scope.categories.push(newCategory);
+    $scope.logbooks.push(newLogbook);
 
   }
 
-  function updateCategoryName ($event, categoryId, newValue) {
-    let category = getUserCategoryById(categoryId);
+  function updateLogbookName ($event, logbookId, newValue) {
+    let logbook = getUserLogbookById(logbookId);
     $scope.$apply(function () {
-      category.Name = newValue;
+      logbook.Name = newValue;
     });
   }
 
-  function getUserCategoryById (categoryId) {
-    return userCategories.filter(category => {
-      return category.Id === categoryId;
+  function getUserLogbookById (logbookId) {
+    return userLogbooks.filter(logbook => {
+      return logbook.Id === logbookId;
     })[0];
   }
 

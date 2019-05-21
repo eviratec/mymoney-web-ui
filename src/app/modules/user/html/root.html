@@ -30,28 +30,28 @@
       <md-divider></md-divider>
 
       <md-subheader ng-click="showSidenavApps=!showSidenavApps">
-        My Categories
+        My Logbooks
       </md-subheader>
 
       <md-list-item ui-sref-active="active"
-        ui-sref="app.user.categoryPage({ categoryId: category.Id })"
-        ng-repeat="category in categories | orderBy: 'Name'"
-        ng-if="showSidenavCategories"
+        ui-sref="app.user.logbookPage({ logbookId: logbook.Id })"
+        ng-repeat="logbook in logbooks | orderBy: 'Name'"
+        ng-if="showSidenavLogbooks"
         ng-click="toggleSidenav('left')">
         <md-icon class="material-icons">
           folder
         </md-icon>
-        <p>{{ category.Name }}</p>
+        <p>{{ logbook.Name }}</p>
       </md-list-item>
 
       <md-list-item
-        ng-click="createCategory()"
-        ng-if="showSidenavCategories"
+        ng-click="createLogbook()"
+        ng-if="showSidenavLogbooks"
         ng-click="toggleSidenav('left')">
         <md-icon class="material-icons">
           create
         </md-icon>
-        <p>Create a Category</p>
+        <p>Create a Logbook</p>
       </md-list-item>
 
     </md-list>

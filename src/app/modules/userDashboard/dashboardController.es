@@ -17,9 +17,9 @@
 angular.module('MyMoneyWebui.UserDashboard')
   .controller('DashboardController', DashboardController);
 
-DashboardController.$inject = ['$scope', '$mdDialog', 'userCategories'];
-function DashboardController (  $scope,   $mdDialog,   userCategories) {
+DashboardController.$inject = ['$scope', '$mdDialog', 'userLogbooks'];
+function DashboardController (  $scope,   $mdDialog,   userLogbooks) {
 
-  $scope.categories = userCategories;
+  $scope.logbooks = userLogbooks;
 
 };

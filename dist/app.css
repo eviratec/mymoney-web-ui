@@ -144,122 +144,6 @@
  * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
-#CategoryPage md-toolbar.page-header {
-  background-color: #222; }
-
-#CategoryPage section.lists {
-  margin-bottom: 16px; }
-  #CategoryPage section.lists footer {
-    padding: 16px; }
-  #CategoryPage section.lists ul.lists {
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background-color: rgba(255, 255, 255, 0.5); }
-    #CategoryPage section.lists ul.lists li {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-      #CategoryPage section.lists ul.lists li a {
-        line-height: 64px;
-        display: block;
-        padding: 0 24px;
-        color: rgba(0, 0, 0, 0.87);
-        text-decoration: none; }
-        #CategoryPage section.lists ul.lists li a md-icon {
-          margin-right: 24px; }
-        #CategoryPage section.lists ul.lists li a span.list-title {
-          text-decoration: underline; }
-
-/**
- * Copyright (c) 2019 Callan Peter Milne
- *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
- * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
- * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
- * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
- * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-#root md-list-item._md-button-wrap.active {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: white; }
-
-/**
- * Copyright (c) 2019 Callan Peter Milne
- *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
- * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
- * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
- * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
- * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-#ListPage md-toolbar.page-header {
-  background-color: #222; }
-
-#ListPage section#NoListItems .create-list {
-  margin: 8px; }
-  #ListPage section#NoListItems .create-list span.placeholder-text {
-    font-size: 1.4em;
-    margin: 16px 0;
-    color: rgba(0, 0, 0, 0.37); }
-
-#ListPage section.list {
-  margin-bottom: 16px; }
-  #ListPage section.list header {
-    padding: 16px; }
-    #ListPage section.list header h2 {
-      margin: 0;
-      font-size: 1.2em;
-      font-weight: 400; }
-  #ListPage section.list ol.items {
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
-    list-style-type: none;
-    margin: 0;
-    padding: 0; }
-    #ListPage section.list ol.items li {
-      background-color: rgba(255, 255, 255, 0.5);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-      #ListPage section.list ol.items li div.check-box button.md-button {
-        margin: 0;
-        padding: 16px;
-        line-height: 48px;
-        width: 60px;
-        height: 60px; }
-        #ListPage section.list ol.items li div.check-box button.md-button .material-icons {
-          font-size: 24px; }
-      #ListPage section.list ol.items li div.item-text {
-        padding: 8px 16px 8px 0; }
-        #ListPage section.list ol.items li div.item-text a {
-          color: rgba(0, 0, 0, 0.87); }
-      #ListPage section.list ol.items li.completed {
-        opacity: 0.5; }
-
-/**
- * Copyright (c) 2019 Callan Peter Milne
- *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
- * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
- * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
- * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
- * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
 html, body {
   height: 100%;
   position: relative; }
@@ -14050,12 +13934,106 @@ md-content.ds-main-content {
 .user-dashboard header .md-subhead {
   color: rgba(0, 0, 0, 0.38); }
 
-.user-dashboard .create-category-card {
+.user-dashboard .create-logbook-card {
   height: 125px;
   margin: 8px;
   border: 2px dashed;
   border-radius: 3px;
   border-color: rgba(0, 0, 0, 0.12); }
+
+/**
+ * Copyright (c) 2019 Callan Peter Milne
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+#LogbookPage md-toolbar.page-header {
+  background-color: #222; }
+
+#LogbookPage section.transactions {
+  margin-bottom: 16px; }
+  #LogbookPage section.transactions footer {
+    padding: 16px; }
+  #LogbookPage section.transactions ul.transactions {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0.5); }
+    #LogbookPage section.transactions ul.transactions li {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+      #LogbookPage section.transactions ul.transactions li a {
+        line-height: 64px;
+        display: block;
+        padding: 0 24px;
+        color: rgba(0, 0, 0, 0.87);
+        text-decoration: none; }
+        #LogbookPage section.transactions ul.transactions li a md-icon {
+          margin-right: 24px; }
+        #LogbookPage section.transactions ul.transactions li a span.transaction-title {
+          text-decoration: underline; }
+
+/**
+ * Copyright (c) 2019 Callan Peter Milne
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+#TransactionPage md-toolbar.page-header {
+  background-color: #222; }
+
+#TransactionPage section#NoTransactionDetails .add-details {
+  margin: 8px; }
+  #TransactionPage section#NoTransactionDetails .add-details span.placeholder-text {
+    font-size: 1.4em;
+    margin: 16px 0;
+    color: rgba(0, 0, 0, 0.37); }
+
+#TransactionPage section.transaction {
+  margin-bottom: 16px; }
+  #TransactionPage section.transaction header {
+    padding: 16px; }
+    #TransactionPage section.transaction header h2 {
+      margin: 0;
+      font-size: 1.2em;
+      font-weight: 400; }
+
+/**
+ * Copyright (c) 2019 Callan Peter Milne
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+#root md-list-item._md-button-wrap.active {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white; }
 
 html, body {
   height: 100%;

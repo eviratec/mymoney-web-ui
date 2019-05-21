@@ -14,12 +14,34 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-angular.module('MyMoneyWebui.ListPage', [
-  'ngAnimate',
-  'ngAria',
-  'ngCookies',
-  'ngMaterial',
-  'ngMessages',
-  'ui.router',
-  'luminous.environment',
-]);
+#TransactionPage {
+
+  md-toolbar.page-header {
+    background-color: #222;
+  }
+  section#NoTransactionDetails {
+    .add-details {
+      margin: 8px;
+      span.placeholder-text {
+        font-size: 1.4em;
+        margin: 16px 0;
+        color: rgba(0,0,0,0.37);
+      }
+    }
+  }
+  section.transaction {
+
+    margin-bottom: 16px;
+
+    header {
+      padding: 16px;
+      h2 {
+        margin: 0;
+        font-size: 1.2em;
+        font-weight: 400;
+      }
+    }
+
+  }
+
+}
