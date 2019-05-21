@@ -104,16 +104,17 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
       .cancel('Cancel');
 
     $mdDialog.show(confirm).then(function(newValue) {
+      let decPlaces = currencyDecimalPlaces;
       let newAmount = newValue;
 
       if (newAmount.indexOf('.') === -1) {
         newAmount += '.00';
       }
 
-      newAmount = newAmount.split('.');
+      newAmount = newAmount.replace(/[^\d.]/g, '').split('.');
       newAmount = Number([
         newAmount[0],
-        newAmount[1].padEnd(currencyDecimalPlaces, '0')
+        newAmount[1].substr(0, decPlaces).padEnd(decPlaces, '0')
       ].join(''));
 
       changeAmount(transaction.Id, newAmount);
@@ -125,7 +126,7 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
 
   $transactionPage.changeOccurred = function ($event) {
 
-    var confirm = $mdDialog.prompt()
+    let confirm = $mdDialog.prompt()
       .title('Change Transaction Occurred')
       .placeholder(transaction.Occurred)
       .ariaLabel('Transaction Occurred')
