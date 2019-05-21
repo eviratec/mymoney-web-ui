@@ -56,17 +56,20 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
 
   $logbookPage.createTransaction = function ($event) {
 
-    var confirm = $mdDialog.prompt()
-      .title('Transaction Summary')
-      .placeholder('Groceries ...')
-      .ariaLabel('Summary')
-      .initialValue('')
-      .targetEvent($event)
-      .ok('Create Transaction')
-      .cancel('Cancel');
+    let createTransactionDialog = {
+      controller: 'CreateTransactionDialogController',
+      templateUrl: 'modules/logbookPage/html/dialogs/createTransaction.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose: true,
+      fullscreen: true,
+      locals: {
+        logbook: logbook,
+      },
+    };
 
-    $mdDialog.show(confirm).then(function(result) {
-      createTransaction(result);
+    $mdDialog.show(createTransactionDialog).then(function(data) {
+      createTransaction(data);
     }, function() {
 
     });
@@ -171,12 +174,18 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
     $state.go('app.user.dashboard');
   }
 
-  function createTransaction (summary) {
+  function createTransaction (data) {
+    let newTransaction;
+    let amount = parseAmount(data.Amount);
 
-    let newTransaction = {
+    if ('debit' === data.Type) {
+      amount = 0 - amount;
+    }
+
+    newTransaction = {
       LogbookId: logbook.Id,
-      Summary: summary,
-      Amount: 100,
+      Summary: data.Summary,
+      Amount: amount,
     };
 
     $api.apiPost('/transactions', newTransaction)
@@ -194,4 +203,20 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
 
   }
 
+  function parseAmount (amount) {
+    let decPlaces = currencyDecimalPlaces;
+    let newAmount = amount;
+
+    if (newAmount.indexOf('.') === -1) {
+      newAmount += '.00';
+    }
+
+    newAmount = newAmount.replace(/[^\d.]/g, '').split('.');
+    newAmount = Number([
+      newAmount[0],
+      newAmount[1].substr(0, decPlaces).padEnd(decPlaces, '0')
+    ].join(''));
+
+    return newAmount;
+  }
 };

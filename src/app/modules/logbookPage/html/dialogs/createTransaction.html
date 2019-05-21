@@ -1,0 +1,69 @@
+<md-dialog id="Dialog_CreateTransaction"
+  aria-label="Create Transaction Form">
+  <form name="createTransactionForm"
+    ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Create Transaction</h2>
+        <span flex></span>
+        <md-button class="md-icon-button"
+          ng-click="cancel()">
+          <md-icon class="material-icons"
+            aria-label="Close dialog">
+            close
+          </md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content"
+        layout="column">
+        <md-input-container>
+          <label>Summary</label>
+          <input name="transactionSummary"
+            ng-model="$data.Summary"
+            md-autofocus>
+        </md-input-container>
+
+        <div layout="row"
+          layout-xs="column"
+          layout-align="start start"
+          layout-align-xs="start stretch">
+          <md-input-container style="min-width: 100px;">
+            <label>Type</label>
+            <md-select name="transactionType"
+              ng-model="$data.Type"
+              required>
+              <md-option value="credit">Credit</md-option>
+              <md-option value="debit">Debit</md-option>
+            </md-select>
+            <div class="errors"
+              ng-messages="createTransactionForm.transactionType.$error">
+              <div ng-message="required">Required</div>
+            </div>
+          </md-input-container>
+
+          <md-input-container>
+            <label>Amount ({{ currencySymbol }})</label>
+            <input name="transactionAmount"
+              ng-model="$data.Amount"
+              md-maxlength="50">
+          </md-input-container>
+        </div>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Cancel
+      </md-button>
+      <md-button type="submit"
+        class="md-primary"
+        ng-click="answer()">
+        Create Transaction
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
