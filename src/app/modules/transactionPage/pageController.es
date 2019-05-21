@@ -51,7 +51,9 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
 
     let confirm = $mdDialog.confirm()
       .title('Are you sure?')
-      .textContent('This will permanently delete your transaction: ' + transaction.Title)
+      .textContent(
+        `This will permanently delete your transaction: ${transaction.Summary}`
+      )
       .ariaLabel('Delete transaction')
       .targetEvent($event)
       .ok('Delete Transaction')
@@ -225,7 +227,9 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
     $mdDialog.show(
       $mdDialog.alert()
         .title('Error')
-        .textContent('An unexpected error was encountered while deleting the transaction.')
+        .textContent(
+          'An unexpected error was encountered while deleting the transaction.'
+        )
         .ariaLabel('Error notification')
         .ok('Ok')
     );
@@ -235,7 +239,9 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
     $mdDialog.show(
       $mdDialog.alert()
         .title('Error')
-        .textContent('An unexpected error was encountered while updating the transaction.')
+        .textContent(
+          'An unexpected error was encountered while updating the transaction.'
+        )
         .ariaLabel('Error notification')
         .ok('Ok')
     );
