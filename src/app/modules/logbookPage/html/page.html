@@ -56,8 +56,7 @@
           <!-- Transaction -->
           <li ng-repeat="transaction in $logbookPage.logbook.Transactions | orderBy: 'Occurred'">
             <a ui-sref="app.user.transactionPage({ transactionId: transaction.Id })"
-              layout="row"
-              flex>
+              layout="row">
               <span class="transaction-title">{{ transaction.Summary }}</span>
               <span flex></span>
               <span class="transaction-currency-symbol">{{ $logbookPage.currencySymbol }}</span>
