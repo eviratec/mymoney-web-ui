@@ -837,6 +837,8 @@ function LogbookPageController($api, $scope, $state, $mdDialog, $timeout, logboo
 
   $logbookPage.logbook = logbook;
   $logbookPage.currencySymbol = currencySymbol;
+  $logbookPage.currencyDecimalPlaces = currencyDecimalPlaces;
+  $logbookPage.currencyAmountMultiplier = Math.pow(10, currencyDecimalPlaces);
 
   checkLogbookExists();
 
@@ -943,6 +945,221 @@ function LogbookPageController($api, $scope, $state, $mdDialog, $timeout, logboo
 
     $logbookPage.logbook.Transactions.push(newTransaction);
   }
+};
+'use strict';
+
+/**
+ * Copyright (c) 2019 Callan Peter Milne
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+angular.module('MyMoneyWebui.TransactionPage').controller('TransactionPageController', TransactionPageController);
+
+TransactionPageController.$inject = ['$api', '$scope', '$state', '$mdDialog', '$timeout', 'transaction'];
+function TransactionPageController($api, $scope, $state, $mdDialog, $timeout, transaction) {
+
+  var CURRENCY_SYMBOLS = {
+    aud: '$',
+    usd: '$',
+    gbp: '£',
+    eur: '€'
+  };
+
+  var CURRENCY_DECIMAL_PLACES = {
+    aud: 2,
+    usd: 2,
+    gbp: 2,
+    eur: 2
+  };
+
+  var $transactionPage = this;
+
+  var logbook = transaction.Logbook;
+
+  var currencySymbol = CURRENCY_SYMBOLS[logbook.Currency];
+  var currencyDecimalPlaces = CURRENCY_DECIMAL_PLACES[logbook.Currency];
+
+  $transactionPage.transaction = transaction;
+
+  $transactionPage.navToParent = function ($event) {
+    navToParent();
+  };
+
+  $transactionPage.deleteTransaction = function ($event) {
+
+    var confirm = $mdDialog.confirm().title('Are you sure?').textContent('This will permanently delete your transaction: ' + transaction.Title).ariaLabel('Delete transaction').targetEvent($event).ok('Delete Transaction').cancel('Cancel');
+
+    $mdDialog.show(confirm).then(function () {
+      deleteTransaction(transaction.Id);
+    }, function () {
+      // do nothing
+    });
+  };
+
+  $transactionPage.changeSummary = function ($event) {
+
+    var confirm = $mdDialog.prompt().title('Change Transaction Summary').placeholder(transaction.Summary).ariaLabel('Transaction Summary').initialValue(transaction.Summary).targetEvent($event).ok('Save').cancel('Cancel');
+
+    $mdDialog.show(confirm).then(function (newValue) {
+      changeSummary(transaction.Id, newValue);
+    }, function () {
+      // do nothing
+    });
+  };
+
+  $transactionPage.changeAmount = function ($event) {
+    var confirm = void 0;
+
+    var amount = String(transaction.Amount);
+
+    amount = [amount.substr(0, amount.length - currencyDecimalPlaces), amount.substr(-currencyDecimalPlaces)].join('.');
+
+    confirm = $mdDialog.prompt().title('Change Transaction Amount').placeholder(amount).ariaLabel('Transaction Amount (' + currencySymbol + ')').initialValue(amount).targetEvent($event).ok('Save').cancel('Cancel');
+
+    $mdDialog.show(confirm).then(function (newValue) {
+      var newAmount = newValue;
+
+      if (newAmount.indexOf('.') === -1) {
+        newAmount += '.00';
+      }
+
+      newAmount = newAmount.split('.');
+      newAmount = Number([newAmount[0], newAmount[1].padEnd(currencyDecimalPlaces, '0')].join(''));
+
+      changeAmount(transaction.Id, newAmount);
+    }, function () {
+      // do nothing
+    });
+  };
+
+  $transactionPage.changeOccurred = function ($event) {
+
+    var confirm = $mdDialog.prompt().title('Change Transaction Occurred').placeholder(transaction.Occurred).ariaLabel('Transaction Occurred').initialValue(transaction.Occurred).targetEvent($event).ok('Save').cancel('Cancel');
+
+    $mdDialog.show(confirm).then(function (newValue) {
+      changeOccurred(transaction.Id, newValue);
+    }, function () {
+      // do nothing
+    });
+  };
+
+  function changeSummary(transactionId, newValue) {
+    if (transaction.Id !== transactionId) {
+      return;
+    }
+
+    $api.apiPutNewValue('/transaction/' + transactionId + '/summary', newValue).then(function (res) {
+      updateTransactionSummary(newValue);
+    }).catch(function (err) {
+      console.log(err);
+      notifyUpdateTransactionError();
+    });
+  }
+
+  function updateTransactionSummary(newValue) {
+    $scope.$apply(function () {
+      transaction.Summary = newValue;
+    });
+  }
+
+  function changeAmount(transactionId, newValue) {
+    if (transaction.Id !== transactionId) {
+      return;
+    }
+
+    $api.apiPutNewValue('/transaction/' + transactionId + '/amount', newValue).then(function (res) {
+      updateTransactionAmount(newValue);
+    }).catch(function (err) {
+      console.log(err);
+      notifyUpdateTransactionError();
+    });
+  }
+
+  function updateTransactionAmount(newValue) {
+    $scope.$apply(function () {
+      transaction.Amount = newValue;
+    });
+  }
+
+  function changeOccurred(transactionId, newValue) {
+    if (transaction.Id !== transactionId) {
+      return;
+    }
+
+    $api.apiPutNewValue('/transaction/' + transactionId + '/occurred', newValue).then(function (res) {
+      updateTransactionOccurred(newValue);
+    }).catch(function (err) {
+      console.log(err);
+      notifyUpdateTransactionError();
+    });
+  }
+
+  function updateTransactionOccurred(newValue) {
+    $scope.$apply(function () {
+      transaction.Occurred = newValue;
+    });
+  }
+
+  function deleteTransaction(transactionId) {
+    if (transaction.Id !== transactionId) {
+      return;
+    }
+
+    $api.apiDelete('/transaction/' + transactionId).then(function (res) {
+      navToParent();
+    }).catch(function (err) {
+      console.log(err);
+      notifyDeleteTransactionError();
+    });
+  }
+
+  function notifyDeleteTransactionError() {
+    $mdDialog.show($mdDialog.alert().title('Error').textContent('An unexpected error was encountered while deleting the transaction.').ariaLabel('Error notification').ok('Ok'));
+  }
+
+  function notifyUpdateTransactionError() {
+    $mdDialog.show($mdDialog.alert().title('Error').textContent('An unexpected error was encountered while updating the transaction.').ariaLabel('Error notification').ok('Ok'));
+  }
+
+  function navToParent() {
+    $state.go('app.user.logbookPage', { logbookId: transaction.LogbookId });
+  }
+};
+'use strict';
+
+/**
+ * Copyright (c) 2019 Callan Peter Milne
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+angular.module('MyMoneyWebui.UserDashboard').controller('DashboardController', DashboardController);
+
+DashboardController.$inject = ['$scope', '$mdDialog', 'userLogbooks'];
+function DashboardController($scope, $mdDialog, userLogbooks) {
+
+  $scope.logbooks = userLogbooks;
 };
 'use strict';
 
@@ -1118,223 +1335,6 @@ function UserController($api, $scope, $rootScope, $auth, $state, $mdDialog, $tim
     return userLogbooks.filter(function (logbook) {
       return logbook.Id === logbookId;
     })[0];
-  }
-};
-'use strict';
-
-/**
- * Copyright (c) 2019 Callan Peter Milne
- *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
- * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
- * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
- * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
- * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-
-angular.module('MyMoneyWebui.UserDashboard').controller('DashboardController', DashboardController);
-
-DashboardController.$inject = ['$scope', '$mdDialog', 'userLogbooks'];
-function DashboardController($scope, $mdDialog, userLogbooks) {
-
-  $scope.logbooks = userLogbooks;
-};
-'use strict';
-
-/**
- * Copyright (c) 2019 Callan Peter Milne
- *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
- * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
- * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
- * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
- * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-
-angular.module('MyMoneyWebui.TransactionPage').controller('TransactionPageController', TransactionPageController);
-
-TransactionPageController.$inject = ['$api', '$scope', '$state', '$mdDialog', '$timeout', 'transaction'];
-function TransactionPageController($api, $scope, $state, $mdDialog, $timeout, transaction) {
-
-  var CURRENCY_SYMBOLS = {
-    aud: '$',
-    usd: '$',
-    gbp: '£',
-    eur: '€'
-  };
-
-  var CURRENCY_DECIMAL_PLACES = {
-    aud: 2,
-    usd: 2,
-    gbp: 2,
-    eur: 2
-  };
-
-  var $transactionPage = this;
-
-  var logbook = transaction.logbook;
-
-  var currencySymbol = CURRENCY_SYMBOLS[logbook.Currency];
-  var currencyDecimalPlaces = CURRENCY_DECIMAL_PLACES[logbook.Currency];
-
-  $transactionPage.transaction = transaction;
-
-  initItemTransactions();
-
-  $transactionPage.navToParent = function ($event) {
-    navToParent();
-  };
-
-  $transactionPage.deleteTransaction = function ($event) {
-
-    var confirm = $mdDialog.confirm().title('Are you sure?').textContent('This will permanently delete your transaction: ' + transaction.Title).ariaLabel('Delete transaction').targetEvent($event).ok('Delete Transaction').cancel('Cancel');
-
-    $mdDialog.show(confirm).then(function () {
-      deleteTransaction(transaction.Id);
-    }, function () {
-      // do nothing
-    });
-  };
-
-  $transactionPage.changeSummary = function ($event) {
-
-    var confirm = $mdDialog.prompt().title('Change Transaction Summary').placeholder(transaction.Summary).ariaLabel('Transaction Summary').initialValue(transaction.Summary).targetEvent($event).ok('Save').cancel('Cancel');
-
-    $mdDialog.show(confirm).then(function (newValue) {
-      changeSummary(transaction.Id, newValue);
-    }, function () {
-      // do nothing
-    });
-  };
-
-  $transactionPage.changeAmount = function ($event) {
-    var confirm = void 0;
-
-    var amount = String(transaction.Amount);
-
-    amount = [amount.substr(0, amount.length - currencyDecimalPlaces), amount.substr(-currencyDecimalPlaces)].join('.');
-
-    confirm = $mdDialog.prompt().title('Change Transaction Amount').placeholder(amount).ariaLabel('Transaction Amount (' + currencySymbol + ')').initialValue(amount).targetEvent($event).ok('Save').cancel('Cancel');
-
-    $mdDialog.show(confirm).then(function (newValue) {
-      var newAmount = newValue;
-
-      if (newAmount.indexOf('.') === -1) {
-        newAmount += '.00';
-      }
-
-      newAmount = newAmount.split('.');
-      newAmount = Number([newAmount[0], newAmount[1].padEnd(currencyDecimalPlaces, '0')].join(''));
-
-      changeAmount(transaction.Id, newValue);
-    }, function () {
-      // do nothing
-    });
-  };
-
-  $transactionPage.changeOccurred = function ($event) {
-
-    var confirm = $mdDialog.prompt().title('Change Transaction Occurred').placeholder(transaction.Occurred).ariaLabel('Transaction Occurred').initialValue(transaction.Occurred).targetEvent($event).ok('Save').cancel('Cancel');
-
-    $mdDialog.show(confirm).then(function (newValue) {
-      changeOccurred(transaction.Id, newValue);
-    }, function () {
-      // do nothing
-    });
-  };
-
-  function changeSummary(transactionId, newValue) {
-    if (transaction.Id !== transactionId) {
-      return;
-    }
-
-    $api.apiPutNewValue('/transaction/' + transactionId + '/summary', newValue).then(function (res) {
-      updateTransactionSummary(newValue);
-    }).catch(function (err) {
-      console.log(err);
-      notifyUpdateTransactionError();
-    });
-  }
-
-  function updateTransactionSummary(newValue) {
-    $scope.$apply(function () {
-      transaction.Summary = newValue;
-    });
-  }
-
-  function changeAmount(transactionId, newValue) {
-    if (transaction.Id !== transactionId) {
-      return;
-    }
-
-    $api.apiPutNewValue('/transaction/' + transactionId + '/amount', newValue).then(function (res) {
-      updateTransactionAmount(newValue);
-    }).catch(function (err) {
-      console.log(err);
-      notifyUpdateTransactionError();
-    });
-  }
-
-  function updateTransactionAmount(newValue) {
-    $scope.$apply(function () {
-      transaction.Amount = newValue;
-    });
-  }
-
-  function changeOccurred(transactionId, newValue) {
-    if (transaction.Id !== transactionId) {
-      return;
-    }
-
-    $api.apiPutNewValue('/transaction/' + transactionId + '/occurred', newValue).then(function (res) {
-      updateTransactionOccurred(newValue);
-    }).catch(function (err) {
-      console.log(err);
-      notifyUpdateTransactionError();
-    });
-  }
-
-  function updateTransactionOccurred(newValue) {
-    $scope.$apply(function () {
-      transaction.Occurred = newValue;
-    });
-  }
-
-  function deleteTransaction(transactionId) {
-    if (transaction.Id !== transactionId) {
-      return;
-    }
-
-    $api.apiDelete('/transaction/' + transactionId).then(function (res) {
-      navToParent();
-    }).catch(function (err) {
-      console.log(err);
-      notifyDeleteTransactionError();
-    });
-  }
-
-  function notifyDeleteTransactionError() {
-    $mdDialog.show($mdDialog.alert().title('Error').textContent('An unexpected error was encountered while deleting the transaction.').ariaLabel('Error notification').ok('Ok'));
-  }
-
-  function notifyUpdateTransactionError() {
-    $mdDialog.show($mdDialog.alert().title('Error').textContent('An unexpected error was encountered while updating the transaction.').ariaLabel('Error notification').ok('Ok'));
-  }
-
-  function navToParent() {
-    $state.go('app.user.logbookPage', { logbookId: transaction.LogbookId });
   }
 };
 'use strict';
@@ -1791,8 +1791,8 @@ angular.module('MyMoneyWebui').run(['$templateCache', function ($templateCache) 
   $templateCache.put('modules/anon/html/root.html', '<div ui-view layout layout-fill></div>\n');
   $templateCache.put('modules/anon/html/signup.html', '<div id="signup" layout layout-fill layout-align="center center">\n  <div class="signup-form form-wrapper" layout="column" md-whiteframe="12dp">\n\n    <header layout="row" layout-align="start center">\n\n      <img src="logo.png" class="app-logo" />\n\n      <div flex layout="column">\n        <span class="md-caption">MyMoney</span>\n        <span class="md-headline">User Signup</span>\n      </div>\n\n    </header>\n\n    <form name="signupForm" layout="column" ng-submit="submit($event)"\n      ng-controller="SignupController">\n\n      <md-content layout="column">\n\n        <md-input-container>\n          <label>Email Address</label>\n          <input name="emailAddress"\n            ng-model="newUser.EmailAddress"\n            required\n            type="email"\n            ng-disabled="inputDisabled" />\n          <div ng-messages="signupForm.emailAddress.$error">\n            <div ng-message="required">A valid email address is required.</div>\n          </div>\n        </md-input-container>\n\n        <md-input-container>\n          <label>Password</label>\n          <input name="password"\n            ng-model="newUser.Password"\n            required\n            type="password"\n            ng-pattern="/^.{7,}$/"\n            ng-disabled="inputDisabled" />\n          <div ng-messages="signupForm.password.$error"\n            md-auto-hide="true"\n            multiple>\n            <div ng-message="required">Password is required.</div>\n            <div ng-message="pattern">Password must be at least 7 characters.</div>\n          </div>\n        </md-input-container>\n\n        <md-input-container>\n          <label>Confirm Password</label>\n          <input name="passwordConfirmation"\n            ng-model="passwordConfirmation"\n            ng-disabled="inputDisabled"\n            type="password"\n            must-match="newUser.Password"\n            required />\n          <div ng-messages="signupForm.passwordConfirmation.$error"\n            md-auto-hide="true"\n            multiple>\n            <div ng-message="required">Please re-enter your password.</div>\n            <div ng-message="mustMatch">Passwords must match.</div>\n          </div>\n        </md-input-container>\n\n        <div>\n          <md-checkbox\n            ng-model="touAccepted"\n            aria-label="I have read and agree to the Terms of Use and Privacy Policy"\n            ng-true-value="true"\n            ng-false-value="false"\n            class="md-align-top-left" flex>\n            I have read and agree to the\n            <a href ng-click="showLegal($event, \'termsOfUse\')">Terms of Use</a>\n            and\n            <a href ng-click="showLegal($event, \'privacyPolicy\')">Privacy Policy</a>\n          </md-checkbox>\n        </div>\n\n      </md-content>\n\n      <div class="submit-row" layout="row" layout-align="end center">\n        <md-button class="md-primary md-raised" type="submit" ng-disabled="!touAccepted || submitDisabled">\n          Create my account\n        </md-button>\n      </div>\n\n      <md-progress-linear md-mode="indeterminate" ng-if="showProgress"></md-progress-linear>\n\n    </form>\n\n  </div>\n</div>\n');
   $templateCache.put('modules/app/html/app.html', '<div ui-view layout layout-fill></div>\n');
-  $templateCache.put('modules/logbookPage/html/page.html', '<!-- Logbook Page -->\n<div id="LogbookPage"\n  layout="row"\n  flex>\n  <div layout="column"\n    flex>\n\n    <!-- Logbook Header -->\n    <md-toolbar class="page-header">\n      <div class="md-toolbar-tools">\n\n        <!-- Logbook Title -->\n        <h1>{{ $logbookPage.logbook.Name }}</h1>\n\n        <span flex></span>\n\n        <md-menu class="logbook-tools">\n          <!-- trigger -->\n          <md-button class="menu-toggle md-icon-button"\n            aria-label="Open Settings"\n            ng-click="openMenu($mdMenu.open, $event)">\n            <md-icon class="material-icons">\n              settings_cog\n            </md-icon>\n          </md-button>\n          <!-- content -->\n          <md-menu-content width="4">\n            <md-menu-item>\n              <md-button ng-click="$logbookPage.renameLogbook($event)">\n                <md-icon>edit</md-icon>\n                Rename Logbook\n              </md-button>\n            </md-menu-item>\n            <md-menu-divider></md-menu-divider>\n            <md-menu-item>\n              <md-button ng-click="$logbookPage.deleteLogbook($event)">\n                <md-icon>delete</md-icon>\n                Delete Logbook\n              </md-button>\n            </md-menu-item>\n          </md-menu-content>\n        </md-menu>\n\n      </div>\n    </md-toolbar>\n\n    <!-- Logbook Content -->\n    <main>\n\n      <!-- Logbook Transactions Section -->\n      <section class="transactions">\n\n        <!-- Logbook Transactions -->\n        <ul class="transactions">\n\n          <!-- Transaction -->\n          <li ng-repeat="transaction in $logbookPage.logbook.transactions | orderBy: \'Occurred\'">\n            <a ui-sref="app.user.transactionPage({ transactionId: transaction.Id })"\n              layout="row"\n              flex>\n              <span class="transaction-title">{{ transaction.Title }}</span>\n              <span flex></span>\n              <span class="transaction-currency-symbol">{{ $logbookPage.currencySymbol }}</span>\n              <span class="transaction-amount">{{ transaction.Amount }}</span>\n            </a>\n          </li>\n\n        </ul>\n\n        <!-- Section Footer -->\n        <footer>\n\n          <!-- Create A New Transaction Button -->\n          <md-button class="md-raised md-primary"\n            ng-click="$logbookPage.createTransaction()">\n\n            <!-- Icon -->\n            <md-icon class="material-icons">\n              create\n            </md-icon>\n\n            <!-- Text -->\n            <span>Create a new transaction</span>\n\n          </md-button>\n\n        </footer>\n\n      </section>\n\n    </main>\n\n  </div>\n</div>\n');
-  $templateCache.put('modules/transactionPage/html/page.html', '<!-- Transaction Page -->\n<div id="TransactionPage"\n  layout="row"\n  flex>\n  <div layout="column"\n    flex>\n\n    <!-- Transaction Header -->\n    <md-toolbar class="page-header">\n      <div class="md-toolbar-tools">\n\n        <!-- Back Button -->\n        <md-button class="back-button md-icon-button"\n          ng-click="$transactionPage.navToParent()">\n          <md-icon class="material-icons">\n            chevron_left\n          </md-icon>\n        </md-button>\n\n        <!-- Transaction Title -->\n        <h1>{{ $transactionPage.transaction.Title }}</h1>\n\n        <span flex></span>\n\n        <md-menu class="transaction-tools">\n          <!-- trigger -->\n          <md-button class="menu-toggle md-icon-button"\n            aria-label="Open Settings"\n            ng-click="openMenu($mdMenu.open, $event)">\n            <md-icon class="material-icons">\n              settings_cog\n            </md-icon>\n          </md-button>\n          <!-- content -->\n          <md-menu-content width="4">\n            <md-menu-item>\n              <md-button ng-click="$transactionPage.changeSummary($event)">\n                <md-icon>edit</md-icon>\n                Change Summary\n              </md-button>\n            </md-menu-item>\n            <md-menu-item>\n              <md-button ng-click="$transactionPage.changeAmount($event)">\n                <md-icon>edit</md-icon>\n                Change Amount\n              </md-button>\n            </md-menu-item>\n            <md-menu-item>\n              <md-button ng-click="$transactionPage.changeOccurred($event)">\n                <md-icon>edit</md-icon>\n                Change Date\n              </md-button>\n            </md-menu-item>\n            <md-menu-divider></md-menu-divider>\n            <md-menu-item>\n              <md-button ng-click="$transactionPage.deleteTransaction($event)">\n                <md-icon>delete</md-icon>\n                Delete Transaction\n              </md-button>\n            </md-menu-item>\n          </md-menu-content>\n        </md-menu>\n\n      </div>\n    </md-toolbar>\n\n    <!-- Transaction Content -->\n    <main layout="column"\n      flex>\n\n      <!-- No Transaction Details Yet ... Section -->\n      <section id="NoTransactionDetails"\n        layout="column"\n        flex>\n        <div class="add-details"\n          layout="column"\n          layout-align="center center"\n          flex>\n          <span flex></span>\n          <span class="placeholder-text">No details yet ...</span>\n          <span flex></span>\n        </div>\n      </section>\n\n    </main>\n\n  </div>\n</div>\n');
+  $templateCache.put('modules/logbookPage/html/page.html', '<!-- Logbook Page -->\n<div id="LogbookPage"\n  layout="row"\n  flex>\n  <div layout="column"\n    flex>\n\n    <!-- Logbook Header -->\n    <md-toolbar class="page-header">\n      <div class="md-toolbar-tools">\n\n        <!-- Logbook Title -->\n        <h1>{{ $logbookPage.logbook.Name }}</h1>\n\n        <span flex></span>\n\n        <md-menu class="logbook-tools">\n          <!-- trigger -->\n          <md-button class="menu-toggle md-icon-button"\n            aria-label="Open Settings"\n            ng-click="openMenu($mdMenu.open, $event)">\n            <md-icon class="material-icons">\n              settings_cog\n            </md-icon>\n          </md-button>\n          <!-- content -->\n          <md-menu-content width="4">\n            <md-menu-item>\n              <md-button ng-click="$logbookPage.renameLogbook($event)">\n                <md-icon>edit</md-icon>\n                Rename Logbook\n              </md-button>\n            </md-menu-item>\n            <md-menu-divider></md-menu-divider>\n            <md-menu-item>\n              <md-button ng-click="$logbookPage.deleteLogbook($event)">\n                <md-icon>delete</md-icon>\n                Delete Logbook\n              </md-button>\n            </md-menu-item>\n          </md-menu-content>\n        </md-menu>\n\n      </div>\n    </md-toolbar>\n\n    <!-- Logbook Content -->\n    <main>\n\n      <!-- Logbook Transactions Section -->\n      <section class="transactions">\n\n        <!-- Logbook Transactions -->\n        <ul class="transactions">\n\n          <!-- Transaction -->\n          <li ng-repeat="transaction in $logbookPage.logbook.Transactions | orderBy: \'Occurred\'">\n            <a ui-sref="app.user.transactionPage({ transactionId: transaction.Id })"\n              layout="row"\n              flex>\n              <span class="transaction-title">{{ transaction.Summary }}</span>\n              <span flex></span>\n              <span class="transaction-currency-symbol">{{ $logbookPage.currencySymbol }}</span>\n              <span class="transaction-amount">{{ transaction.Amount / $logbookPage.currencyAmountMultiplier }}</span>\n            </a>\n          </li>\n\n        </ul>\n\n        <!-- Section Footer -->\n        <footer>\n\n          <!-- Create A New Transaction Button -->\n          <md-button class="md-raised md-primary"\n            ng-click="$logbookPage.createTransaction()">\n\n            <!-- Icon -->\n            <md-icon class="material-icons">\n              create\n            </md-icon>\n\n            <!-- Text -->\n            <span>Create a new transaction</span>\n\n          </md-button>\n\n        </footer>\n\n      </section>\n\n    </main>\n\n  </div>\n</div>\n');
+  $templateCache.put('modules/transactionPage/html/page.html', '<!-- Transaction Page -->\n<div id="TransactionPage"\n  layout="row"\n  flex>\n  <div layout="column"\n    flex>\n\n    <!-- Transaction Header -->\n    <md-toolbar class="page-header">\n      <div class="md-toolbar-tools">\n\n        <!-- Back Button -->\n        <md-button class="back-button md-icon-button"\n          ng-click="$transactionPage.navToParent()">\n          <md-icon class="material-icons">\n            chevron_left\n          </md-icon>\n        </md-button>\n\n        <!-- Transaction Title -->\n        <h1>{{ $transactionPage.transaction.Summary }}</h1>\n\n        <span flex></span>\n\n        <md-menu class="transaction-tools">\n          <!-- trigger -->\n          <md-button class="menu-toggle md-icon-button"\n            aria-label="Open Settings"\n            ng-click="openMenu($mdMenu.open, $event)">\n            <md-icon class="material-icons">\n              settings_cog\n            </md-icon>\n          </md-button>\n          <!-- content -->\n          <md-menu-content width="4">\n            <md-menu-item>\n              <md-button ng-click="$transactionPage.changeSummary($event)">\n                <md-icon>edit</md-icon>\n                Change Summary\n              </md-button>\n            </md-menu-item>\n            <md-menu-item>\n              <md-button ng-click="$transactionPage.changeAmount($event)">\n                <md-icon>edit</md-icon>\n                Change Amount\n              </md-button>\n            </md-menu-item>\n            <md-menu-item>\n              <md-button ng-click="$transactionPage.changeOccurred($event)">\n                <md-icon>edit</md-icon>\n                Change Date\n              </md-button>\n            </md-menu-item>\n            <md-menu-divider></md-menu-divider>\n            <md-menu-item>\n              <md-button ng-click="$transactionPage.deleteTransaction($event)">\n                <md-icon>delete</md-icon>\n                Delete Transaction\n              </md-button>\n            </md-menu-item>\n          </md-menu-content>\n        </md-menu>\n\n      </div>\n    </md-toolbar>\n\n    <!-- Transaction Content -->\n    <main layout="column"\n      flex>\n\n      <!-- No Transaction Details Yet ... Section -->\n      <section id="NoTransactionDetails"\n        layout="column"\n        flex>\n        <div class="add-details"\n          layout="column"\n          layout-align="center center"\n          flex>\n          <span flex></span>\n          <span class="placeholder-text">No details yet ...</span>\n          <span flex></span>\n        </div>\n      </section>\n\n    </main>\n\n  </div>\n</div>\n');
   $templateCache.put('modules/user/html/root.html', '<md-sidenav class="md-sidenav-left md-whiteframe-z2"\n  layout="column"\n  md-theme="sidenavTheme"\n  md-component-id="left"\n  md-is-locked-open="$mdMedia(\'gt-md\')">\n\n  <div ng-controller="SidenavController as $sidenav"\n    ng-cloak>\n\n    <header layout="row" layout-align="start center">\n\n      <img src="logo.png" class="app-logo" />\n\n      <div flex layout="column">\n        <span class="md-headline">MyMoney</span>\n        <span class="md-caption">eviratec.software</span>\n      </div>\n\n    </header>\n\n    <md-list>\n      <md-list-item ui-sref="app.user.dashboard"\n        ng-click="toggleSidenav(\'left\')">\n        <md-icon class="material-icons">\n          apps\n        </md-icon>\n        <p>Dashboard</p>\n      </md-list-item>\n\n      <md-divider></md-divider>\n\n      <md-subheader ng-click="showSidenavApps=!showSidenavApps">\n        My Logbooks\n      </md-subheader>\n\n      <md-list-item ui-sref-active="active"\n        ui-sref="app.user.logbookPage({ logbookId: logbook.Id })"\n        ng-repeat="logbook in logbooks | orderBy: \'Name\'"\n        ng-if="showSidenavLogbooks"\n        ng-click="toggleSidenav(\'left\')">\n        <md-icon class="material-icons">\n          folder\n        </md-icon>\n        <p>{{ logbook.Name }}</p>\n      </md-list-item>\n\n      <md-list-item\n        ng-click="createLogbook()"\n        ng-if="showSidenavLogbooks"\n        ng-click="toggleSidenav(\'left\')">\n        <md-icon class="material-icons">\n          create\n        </md-icon>\n        <p>Create a Logbook</p>\n      </md-list-item>\n\n    </md-list>\n  </div>\n</md-sidenav>\n\n<div class="relative"\n  layout="column"\n  role="main"\n  ng-controller="LayoutController"\n  layout-fill\n  ng-cloak>\n  <md-toolbar id="userToolbar">\n    <div class="md-toolbar-tools">\n\n      <img class="logo"\n        src="logo.png" />\n\n      <h3 class="md-caption"\n        ng-if="$mdMedia(\'gt-xs\')">\n        MyMoney\n      </h3>\n\n      <span flex></span>\n\n      <md-menu class="hide-gt-xs">\n        <!-- trigger -->\n        <md-button class="md-icon-button"\n          aria-label="Open Settings"\n          ng-click="openMenu($mdMenu.open, $event)">\n          <md-icon class="material-icons">\n            person\n          </md-icon>\n          <md-icon class="material-icons">\n            arrow_drop_down\n          </md-icon>\n        </md-button>\n        <!-- content -->\n        <md-menu-content width="4">\n          <md-menu-item>\n              <span class="user-displayname">\n                {{ login }}\n              </span>\n          </md-menu-item>\n          <md-menu-divider></md-menu-divider>\n          <md-menu-item>\n            <md-button ng-click="logout()">\n              <md-icon>power_settings_new</md-icon>\n              Logout\n            </md-button>\n          </md-menu-item>\n        </md-menu-content>\n      </md-menu>\n\n      <md-menu class="hide-xs">\n        <!-- trigger -->\n        <md-button\n          aria-label="Open Settings"\n          ng-click="openMenu($mdMenu.open, $event)">\n          <md-icon class="material-icons">\n            person\n          </md-icon>\n          <span class="user-displayname md-caption">\n            {{ login }}\n          </span>\n          <md-icon class="material-icons">\n            arrow_drop_down\n          </md-icon>\n        </md-button>\n        <!-- content -->\n        <md-menu-content width="4">\n          <!-- <md-menu-item>\n            <md-button ng-click="changeProfile($event)">\n              <md-icon>face</md-icon>\n              Profile\n            </md-button>\n          </md-menu-item>\n          <md-menu-item>\n            <md-button ng-click="changePassword()">\n              <md-icon>lock</md-icon>\n              Password\n            </md-button>\n          </md-menu-item>\n          <md-menu-divider></md-menu-divider> -->\n          <md-menu-item>\n            <md-button ng-click="logout()">\n              <md-icon>power_settings_new</md-icon>\n              Logout\n            </md-button>\n          </md-menu-item>\n        </md-menu-content>\n      </md-menu>\n\n      <md-button class="md-icon-button"\n        aria-label="Menu"\n        ng-click="toggleSidenav(\'left\')"\n        hide-gt-md>\n        <md-icon class="material-icons">\n          menu\n        </md-icon>\n      </md-button>\n    </div>\n  </md-toolbar>\n\n  <md-content class="ds-main-content"\n    layout="column"\n    md-scroll-y\n    flex>\n    <div layout="column"\n      layout-fill\n      ui-view>\n    </div>\n  </md-content>\n\n</div>\n');
   $templateCache.put('modules/userDashboard/html/dashboard.html', '<div layout="row"\n  flex>\n\n  <div class="user-dashboard"\n    style="margin: 8px;padding:8px;"\n    flex>\n\n    <div layout="column">\n      <div style="border-bottom: 1px solid rgba(0,0,0,0.12);margin:24px 8px 8px;padding:0 8px;height:49px;"\n        layout="row"\n        layout-align="start center">\n        <md-card-header-text>\n          <span class="md-headline">\n            List Logbooks\n          </span>\n        </md-card-header-text>\n      </div>\n\n      <div layout="row"\n        layout-xs="column"\n        layout-wrap>\n        <div flex-gt-xs="33"\n          ng-repeat="logbook in logbooks | orderBy: \'Name\'">\n          <md-card>\n            <md-card-header ui-sref="app.user.logbookPage({ logbookId: logbook.Id })">\n              <md-card-avatar>\n                <md-icon class="material-icons">\n                  webui\n                </md-icon>\n              </md-card-avatar>\n              <md-card-header-text>\n                <span class="md-title">{{ logbook.Name }}</span>\n                <span class="md-subhead">MyMoney Logbook</span>\n              </md-card-header-text>\n            </md-card-header>\n            <md-divider></md-divider>\n            <md-card-actions layout="row"\n              layout-align="end center">\n              <md-button class="md-primary"\n                ui-sref="app.user.logbookPage({ logbookId: logbook.Id })">\n                <md-icon class="material-icons">\n                  edit\n                </md-icon>\n                Manage Transactions\n              </md-button>\n            </md-card-actions>\n          </md-card>\n        </div>\n        <div flex-gt-xs="33">\n          <div class="create-logbook-card"\n            layout="column"\n            layout-align="center center">\n            <span>New logbook?</span>\n            <md-button class="md-raised md-primary"\n              ng-click="createLogbook()">\n              <md-icon class="material-icons">\n                create\n              </md-icon>\n              Create a new logbook\n            </md-button>\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n  </div>\n\n</div>\n');
   $templateCache.put('modules/app/html/dialog/privacyPolicy.html', '<md-dialog id="Dialog_PrivacyPolicy"\n  aria-label="Privacy Policy">\n  <form ng-cloak>\n    <md-toolbar>\n      <div class="md-toolbar-tools">\n        <h2>Task Evo Privacy Policy</h2>\n        <span flex></span>\n        <md-button class="md-icon-button" ng-click="cancel()">\n          <md-icon class="material-icons" aria-label="Close dialog">\n            close\n          </md-icon>\n        </md-button>\n      </div>\n    </md-toolbar>\n\n    <md-dialog-content>\n      <div class="legal-text">\n        <h1>Privacy Policy</h1>\n\n        <p>Last updated: July 28, 2017</p>\n\n        <p>CALLAN MILNE ("us", "we", or "our") operates the https://my.moneylog.xyz website (the "Service").</p>\n\n        <p>This page informs you of our policies regarding the collection, use and disclosure of Personal Information when you use our Service.</p>\n\n        <p>We will not use or share your information with anyone except as described in this Privacy Policy.</p>\n\n        <p>We use your Personal Information for providing and improving the Service. By using the Service, you agree to the collection and use of information in accordance with this policy. Unless otherwise defined in this Privacy Policy, terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, accessible at http://www.mymoney.xyz</p>\n\n\n\n        <h2>Information Collection And Use</h2>\n\n        <p>While using our Service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you. Personally identifiable information may include, but is not limited to, your email address, name, other information ("Personal Information").</p>\n\n        <p>The purpose for which we collect personal information is to provide you with the best service experience possible on the Service and for our internal business purposes that form part of normal business practices. Some provision of personal information is optional. However, if you do not provide us with certain types of personal information, you may be unable to enjoy the full functionality of the Service.</p>\n\n\n        <h2>Log Data</h2>\n\n        <p>We may also collect information that your browser sends whenever you visit our Service ("Log Data"). This Log Data may include information such as your computer\'s Internet Protocol ("IP") address, browser type, browser version, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages and other statistics.</p>\n\n        <p>In addition, we may use third party services such as Google Analytics that collect, monitor and analyze this type of information in order to increase our Service\'s functionality. These third party service providers have their own privacy policies addressing how they use such information.</p>\n\n\n\n\n        <h2>Cookies</h2>\n\n        <p>Cookies are files with small amount of data, which may include an anonymous unique identifier. Cookies are sent to your browser from a web site and stored on your computer\'s hard drive.</p>\n\n        <p>We use "cookies" to collect information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our Service.</p>\n\n        <p>We send a session cookie to your computer when you log in to your User account. This type of cookie helps if you visit multiple pages on the Service during the same session, so that you don\'t need to enter your password on each page. Once you log out or close your browser, this cookie expires.</p>\n\n        <p>We also use longer-lasting cookies for other purposes such as to display your Content and account information. We encode our cookie so that only we can interpret the information stored in them. Users always have the option of disabling cookies via their browser preferences. If you disable cookies on your browser, please note that some parts of our Service may not function as effectively or may be considerably slower.</p>\n\n\n\n\n\n\n        <h2>Service Providers</h2>\n\n        <p>We may employ third party companies and individuals to facilitate our Service, to provide the Service on our behalf, to perform Service-related services or to assist us in analyzing how our Service is used.</p>\n\n        <p>These third parties have access to your Personal Information only to perform these tasks on our behalf and are obligated not to disclose or use it for any other purpose.</p>\n\n\n\n\n        <h2>Compliance With Laws</h2>\n\n        <p>We may disclose personal information in special situations where we have reason to believe that doing so is necessary to identify, contact or bring legal action against anyone damaging, injuring or interfering (intentionally or unintentionally) with our rights or property, users or anyone else who could be harmed by such activities. <p>We will disclose your Personal Information where required to do so by law or subpoena or if we believe that such action is necessary to comply with the law and the reasonable requests of law enforcement or to protect the security or integrity of our Service.</p>\n\n\n        <h2>Business Transaction</h2>\n\n        <p>In the event that we sell or buy businesses or their assets, or engage in transfers, acquisitions, mergers, restructurings, changes of control and other similar transactions, customer or user information is generally one of the transferable business assets. Thus, your personal information may be subject to such a transfer. In the unlikely event of insolvency, personal information may be transferred to a trustee or debtor in possession and then to a subsequent purchaser.</p>\n\n\n        <h2>Security</h2>\n\n        <p>The security of your Personal Information is important to us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Information, we cannot guarantee its absolute security.</p>\n\n\n        <h2>International Transfer</h2>\n\n        <p>Your information, including Personal Information, may be transferred to \u2014 and maintained on \u2014 computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ than those from your jurisdiction.</p>\n\n        <p>If you are located outside Australia and choose to provide information to us, please note that we transfer the information, including Personal Information, to Australia and process it there.</p>\n\n        <p>Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that transfer.</p>\n\n\n        <h2>Access and Correction</h2>\n\n        <p>Australian Privacy Principle 6 of the Privacy Act 1988 (Cth) allows you to get access to, and correct, the personal information we hold about you in certain circumstances. If you would like to obtain such access, please contact us on the details set out above.</p>\n\n        <p>Please note that the access and correction requirements under this Privacy Policy operates alongside and do not replace other informal or legal procedures by which an individual can be provided access to, or correction of, their personal information, including the requirements under the Freedom of Information Act 1982 (Cth).</p>\n\n\n        <h2>Complaints</h2>\n\n        <p>Australian Privacy Principle 1 of the Privacy Act 1988 (Cth) allows you to make a complaint about any alleged breaches of privacy. In order to lodge a complaint with us, please contact us using the details above with the following information:</p>\n\n        <ul>\n            <li>\n                <p>Your name and address;</p>\n            </li>\n            <li>\n                <p>Details of the alleged breach of privacy; and</p>\n            </li>\n            <li>\n                <p>URL link to the alleged breach of privacy (if applicable).</p>\n            </li>\n        </ul>\n\n        <p>Please allow us 30 days to investigate your complaint, after which we will contact you immediately to resolve the issue.</p>\n\n\n        <h2>Retention of Information</h2>\n\n        <p>We retain information for as long as required, allowed or we believe it useful, but do not undertake retention obligations. We may dispose of information in our discretion without notice, subject to applicable law that specifically requires the handling or retention of information. You must keep your own, separate back-up records.</p>\n\n\n        <h2>Links To Other Sites</h2>\n\n        <p>Our Service may contain links to other sites that are not operated by us. If you click on a third party link, you will be directed to that third party\'s site. We strongly advise you to review the Privacy Policy of every site you visit.</p>\n\n        <p>We have no control over, and assume no responsibility for the content, privacy policies or practices of any third party sites or services.</p>\n\n\n        <h2>Children\'s Privacy</h2>\n\n        <p>Our Service does not address anyone under the age of 18 ("Children").</p>\n\n        <p>We do not knowingly collect personally identifiable information from children under 18. If you are a parent or guardian and you are aware that your Children has provided us with Personal Information, please contact us. If we become aware that we have collected Personal Information from children under 18 without verification of parental consent, we take steps to remove that information from our servers or replace it with the Personal Information of the Children\u2019s parent or guardian.</p>\n\n\n        <h2>Changes To This Privacy Policy</h2>\n\n        <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>\n\n        <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>\n\n        <p>If we make any material changes to this Privacy Policy, we will notify you either through the email address you have provided us, or by placing a prominent notice on our website.</p>\n\n\n        <h2>Consent</h2>\n\n        <p>You warrant that you are able to give consents under Australian Law or, in the event that you do not have the capacity to give consent, you warrant that your guardian or attorney is able to give any consent required under this Privacy Policy on your behalf.</p>\n\n        <p>You hereby expressly and voluntarily grant your informed consent to us to deal with your personal information in accordance with the terms and conditions of this Privacy Policy. Should you retract your consent, please contact us. If you retract your consent, you acknowledge and agree that failure to provide certain types of personal information may not give you access to the full functionality of the Service.</p>\n\n\n        <h2>Contact Us</h2>\n\n        <p>If you have any questions about this Privacy Policy, please <a href="mailto:info@mymoney.xyz">contact us</a>.</p>\n      </div>\n    </md-dialog-content>\n\n    <md-dialog-actions layout="row">\n      <span flex></span>\n      <md-button class="md-primary" ng-click="cancel()">\n        Close\n      </md-button>\n    </md-dialog-actions>\n  </form>\n</md-dialog>\n');

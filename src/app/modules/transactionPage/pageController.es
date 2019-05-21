@@ -36,14 +36,12 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
 
   const $transactionPage = this;
 
-  const logbook = transaction.logbook;
+  const logbook = transaction.Logbook;
 
   const currencySymbol = CURRENCY_SYMBOLS[logbook.Currency];
   const currencyDecimalPlaces = CURRENCY_DECIMAL_PLACES[logbook.Currency];
 
   $transactionPage.transaction = transaction;
-
-  initItemTransactions();
 
   $transactionPage.navToParent = function ($event) {
     navToParent();
@@ -118,7 +116,7 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
         newAmount[1].padEnd(currencyDecimalPlaces, '0')
       ].join(''));
 
-      changeAmount(transaction.Id, newValue);
+      changeAmount(transaction.Id, newAmount);
     }, function() {
       // do nothing
     });

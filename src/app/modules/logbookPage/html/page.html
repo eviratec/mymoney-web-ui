@@ -54,14 +54,14 @@
         <ul class="transactions">
 
           <!-- Transaction -->
-          <li ng-repeat="transaction in $logbookPage.logbook.transactions | orderBy: 'Occurred'">
+          <li ng-repeat="transaction in $logbookPage.logbook.Transactions | orderBy: 'Occurred'">
             <a ui-sref="app.user.transactionPage({ transactionId: transaction.Id })"
               layout="row"
               flex>
-              <span class="transaction-title">{{ transaction.Title }}</span>
+              <span class="transaction-title">{{ transaction.Summary }}</span>
               <span flex></span>
               <span class="transaction-currency-symbol">{{ $logbookPage.currencySymbol }}</span>
-              <span class="transaction-amount">{{ transaction.Amount }}</span>
+              <span class="transaction-amount">{{ transaction.Amount / $logbookPage.currencyAmountMultiplier }}</span>
             </a>
           </li>
 

@@ -41,6 +41,8 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
 
   $logbookPage.logbook = logbook;
   $logbookPage.currencySymbol = currencySymbol;
+  $logbookPage.currencyDecimalPlaces = currencyDecimalPlaces;
+  $logbookPage.currencyAmountMultiplier = Math.pow(10, currencyDecimalPlaces);
 
   checkLogbookExists();
 
