@@ -14,28 +14,14 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-angular.module('MyMoneyWebui.LogbookPage')
-  .controller('CreateTransactionDialogController', CreateTransactionDialogController);
+angular.module('MyMoneyWebui.TransactionPage')
+  .controller('ChangeTransactionOccurredDialogController', ChangeTransactionOccurredDialogController);
 
-CreateTransactionDialogController.$inject = ['$scope', '$timeout', '$mdDialog', 'logbook'];
-function CreateTransactionDialogController (  $scope,   $timeout,   $mdDialog,   logbook) {
-  const CURRENCY_SYMBOLS = {
-    aud: '$',
-    usd: '$',
-    gbp: '£',
-    eur: '€',
-  };
-
-  $scope.currencySymbol = CURRENCY_SYMBOLS[logbook.Currency];
-
+ChangeTransactionOccurredDialogController.$inject = ['$scope', '$timeout', '$mdDialog', 'transaction'];
+function ChangeTransactionOccurredDialogController (  $scope,   $timeout,   $mdDialog,   transaction) {
   $scope.$data = {
-    Summary: '',
-    Type: 'credit',
-    Amount: '1.00',
-    Occurred: new Date(Math.round(Date.now()/1000)*1000),
+    Occurred: new Date(transaction.Occurred*1000),
   };
-
-  $scope.logbook = logbook;
 
   $scope.hide = function() {
     $mdDialog.cancel();
@@ -46,11 +32,6 @@ function CreateTransactionDialogController (  $scope,   $timeout,   $mdDialog,  
   };
 
   $scope.answer = function() {
-    $mdDialog.hide({
-      Summary: $scope.$data.Summary,
-      Type: $scope.$data.Type,
-      Amount: $scope.$data.Amount,
-      Occurred: $scope.$data.Occurred.getTime()/1000,
-    });
+    $mdDialog.hide($scope.$data.Occurred.getTime());
   };
 }

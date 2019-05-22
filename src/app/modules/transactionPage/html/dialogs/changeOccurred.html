@@ -1,0 +1,44 @@
+<md-dialog id="Dialog_ChangeTransactionOccurred"
+  aria-label="Change Transaction Occurred Form">
+  <form name="changeTransactionOccurredForm"
+    ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Change Transaction Occurred</h2>
+        <span flex></span>
+        <md-button class="md-icon-button"
+          ng-click="cancel()">
+          <md-icon class="material-icons"
+            aria-label="Close dialog">
+            close
+          </md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content"
+        layout="column">
+        <md-input-container>
+          <label>Occurred</label>
+          <input name="transactionOccurred"
+            ng-model="$data.Occurred"
+            type="datetime-local"
+            md-autofocus>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Cancel
+      </md-button>
+      <md-button type="submit"
+        class="md-primary"
+        ng-click="answer()">
+        Save
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

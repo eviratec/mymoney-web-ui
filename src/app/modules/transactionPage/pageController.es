@@ -133,19 +133,22 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
 
   $transactionPage.changeOccurred = function ($event) {
 
-    let confirm = $mdDialog.prompt()
-      .title('Change Transaction Occurred')
-      .placeholder(transaction.Occurred)
-      .ariaLabel('Transaction Occurred')
-      .initialValue(transaction.Occurred)
-      .targetEvent($event)
-      .ok('Save')
-      .cancel('Cancel');
+    let changeTransactionOccurredDialog = {
+      controller: 'ChangeTransactionOccurredDialogController',
+      templateUrl: 'modules/transactionPage/html/dialogs/changeOccurred.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose: true,
+      fullscreen: true,
+      locals: {
+        transaction: transaction,
+      },
+    };
 
-    $mdDialog.show(confirm).then(function(newValue) {
-      changeOccurred(transaction.Id, newValue);
+    $mdDialog.show(changeTransactionOccurredDialog).then(function(newValue) {
+      changeOccurred(transaction.Id, newValue/1000);
     }, function() {
-      // do nothing
+
     });
 
   };

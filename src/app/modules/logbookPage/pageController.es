@@ -186,6 +186,7 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
       LogbookId: logbook.Id,
       Summary: data.Summary,
       Amount: amount,
+      Occurred: data.Occurred,
     };
 
     $api.apiPost('/transactions', newTransaction)

@@ -27,10 +27,16 @@
         </md-input-container>
 
         <div layout="row"
-          layout-xs="column"
+          layout-xs="row"
           layout-align="start start"
           layout-align-xs="start stretch">
-          <md-input-container style="min-width: 100px;">
+          <md-input-container flex>
+            <label>Amount ({{ currencySymbol }})</label>
+            <input name="transactionAmount"
+              ng-model="$data.Amount">
+          </md-input-container>
+
+          <md-input-container>
             <label>Type</label>
             <md-select name="transactionType"
               ng-model="$data.Type"
@@ -43,14 +49,14 @@
               <div ng-message="required">Required</div>
             </div>
           </md-input-container>
-
-          <md-input-container>
-            <label>Amount ({{ currencySymbol }})</label>
-            <input name="transactionAmount"
-              ng-model="$data.Amount"
-              md-maxlength="50">
-          </md-input-container>
         </div>
+
+        <md-input-container>
+          <label>Date Occurred</label>
+          <input name="transactionOccurred"
+            ng-model="$data.Occurred"
+            type="datetime-local">
+        </md-input-container>
       </div>
     </md-dialog-content>
 
