@@ -39,12 +39,18 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
   const currencySymbol = CURRENCY_SYMBOLS[logbook.Currency];
   const currencyDecimalPlaces = CURRENCY_DECIMAL_PLACES[logbook.Currency];
 
+  const logbookPageDays = [];
+
   $logbookPage.logbook = logbook;
   $logbookPage.currencySymbol = currencySymbol;
   $logbookPage.currencyDecimalPlaces = currencyDecimalPlaces;
   $logbookPage.currencyAmountMultiplier = Math.pow(10, currencyDecimalPlaces);
 
+  $logbookPage.days = logbookPageDays;
+
   checkLogbookExists();
+
+  initLogbookDays();
 
   function checkLogbookExists () {
     if (logbook) {
@@ -202,6 +208,7 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
 
     $logbookPage.logbook.Transactions.push(newTransaction);
 
+    addTransactionToLogbookDay(newTransaction);
   }
 
   function parseAmount (amount) {
@@ -219,5 +226,57 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
     ].join(''));
 
     return newAmount;
+  }
+
+
+  function addTransactionToLogbookDay (transaction) {
+    let date = getTransactionDayDate(transaction);
+    let logbookDay = getLogbookDayByDate(date);
+
+    if (null === logbookDay) {
+      logbookDay = addLogbookDay(date);
+    }
+
+    logbookDay.transactions.push(transaction);
+  }
+
+  function getTransactionDayDate (transaction) {
+    return (new Date(transaction.Occurred*1000)).toJSON().split('T')[0];
+  }
+
+  function initLogbookDays () {
+    logbook.Transactions.forEach(addTransactionToLogbookDay);
+  }
+
+  function addLogbookDay (date) {
+    let transactions = [];
+    let logbookDay = {};
+
+    Object.defineProperties(logbookDay, {
+      date: {
+        value: date,
+        enumerable: true,
+      },
+      transactions: {
+        value: transactions,
+        enumerable: true,
+      },
+    });
+
+    logbookPageDays.push(logbookDay);
+
+    return logbookDay;
+  }
+
+  function getLogbookDayByDate (date) {
+    let logbookDay = logbookPageDays.filter(day => {
+      return day.date === date;
+    })[0];
+
+    if (!logbookDay) {
+      return null;
+    }
+
+    return logbookDay;
   }
 };

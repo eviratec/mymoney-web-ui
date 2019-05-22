@@ -50,18 +50,30 @@
       <!-- Logbook Transactions Section -->
       <section class="transactions">
 
-        <!-- Logbook Transactions -->
-        <ul class="transactions">
+        <!-- Logbook Days -->
+        <ul class="logbook-days">
 
-          <!-- Transaction -->
-          <li ng-repeat="transaction in $logbookPage.logbook.Transactions | orderBy: 'Occurred'">
-            <a ui-sref="app.user.transactionPage({ transactionId: transaction.Id })"
-              layout="row">
-              <span class="transaction-title">{{ transaction.Summary }}</span>
-              <span flex></span>
-              <span class="transaction-currency-symbol">{{ $logbookPage.currencySymbol }}</span>
-              <span class="transaction-amount">{{ transaction.Amount / $logbookPage.currencyAmountMultiplier }}</span>
-            </a>
+          <!-- Day -->
+          <li ng-repeat="day in $logbookPage.days | orderBy: 'date'">
+            <md-subheader>
+              {{ day.date }}
+            </md-subheader>
+
+            <!-- Logbook Transactions -->
+            <ul class="transactions">
+
+              <!-- Transaction -->
+              <li ng-repeat="transaction in day.transactions | orderBy: 'Occurred'">
+                <a ui-sref="app.user.transactionPage({ transactionId: transaction.Id })"
+                  layout="row">
+                  <span class="transaction-title">{{ transaction.Summary }}</span>
+                  <span flex></span>
+                  <span class="transaction-currency-symbol">{{ $logbookPage.currencySymbol }}</span>
+                  <span class="transaction-amount">{{ transaction.Amount / $logbookPage.currencyAmountMultiplier }}</span>
+                </a>
+              </li>
+
+            </ul>
           </li>
 
         </ul>
