@@ -14,32 +14,11 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-angular.module('MyMoneyWebui.UserDashboard')
-  .controller('DashboardController', DashboardController);
-
-DashboardController.$inject = ['$scope', '$mdDialog', 'userLogbooks'];
-function DashboardController (  $scope,   $mdDialog,   userLogbooks) {
-
-  const CURRENCY_SYMBOLS = {
-    aud: '$',
-    usd: '$',
-    gbp: '£',
-    eur: '€',
-  };
-
-  const CURRENCY_DECIMAL_PLACES = {
-    aud: 2,
-    usd: 2,
-    gbp: 2,
-    eur: 2,
-  };
-
-  $scope.logbooks = userLogbooks;
-
-  $scope.currencySymbols = CURRENCY_SYMBOLS;
-  $scope.currencyDecimalPlaces = CURRENCY_DECIMAL_PLACES;
-
-  $scope.abs = Math.abs;
-  $scope.pow = Math.pow;
-
-};
+#UserDashboard {
+  span.logbook-balance {
+    font-size: 1.5em;
+  }
+  span.logbook-balance-currency-symbol {
+    margin-right: 1em;
+  }
+}

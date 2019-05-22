@@ -35,6 +35,7 @@ function UserController (  $api,   $scope,   $rootScope,   $auth,   $state,   $m
   $scope.login = user.Login;
 
   $scope.$on(`logbook:renamed`, updateLogbookName);
+  $scope.$on(`logbook:transaction`, updateLogbookBalance);
 
   $scope.createLogbook = function ($event) {
 
@@ -76,6 +77,13 @@ function UserController (  $api,   $scope,   $rootScope,   $auth,   $state,   $m
 
   }
 
+  function updateLogbookBalance ($event, logbookId, newValue, oldValue) {
+    let logbook = getUserLogbookById(logbookId);
+    $scope.$apply(function () {
+      logbook.Balance = logbook.Balance + calcDiff(oldValue, newValue);
+    });
+  }
+
   function updateLogbookName ($event, logbookId, newValue) {
     let logbook = getUserLogbookById(logbookId);
     $scope.$apply(function () {
@@ -87,6 +95,32 @@ function UserController (  $api,   $scope,   $rootScope,   $auth,   $state,   $m
     return userLogbooks.filter(logbook => {
       return logbook.Id === logbookId;
     })[0];
+  }
+
+  function calcDiff (oldValue, newValue) {
+    let oldValueIsNeg = oldValue < 0; // old value is less than zero
+    let oldValueIsPos = oldValue > 0; // old value is greater than zero
+    let newValueIsNeg = newValue < 0; // new value is less than zero
+    let newValueIsPos = newValue > 0; // new value is greater than zero
+
+    let negToPos = oldValueIsNeg && newValueIsPos; // convert neg to pos
+    let posToNeg = oldValueIsPos && newValueIsNeg; // convert pos to neg
+
+    let isNeg = oldValueIsNeg && newValueIsNeg; // both numbers are negative
+
+    if (posToNeg) {
+      return 0 - (oldValue + Math.abs(newValue));
+    }
+
+    if (negToPos) {
+      return Math.abs(oldValue) + newValue;
+    }
+
+    if (isNeg) {
+      return Math.abs(oldValue) - Math.abs(newValue);
+    }
+
+    return (0 - oldValue) + newValue;
   }
 
 };

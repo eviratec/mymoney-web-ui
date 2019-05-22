@@ -89,18 +89,18 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
   $transactionPage.changeAmount = function ($event) {
     let confirm;
 
-    let amount = String(transaction.Amount);
+    let oldAmount = String(transaction.Amount);
 
-    amount = [
-      amount.substr(0, amount.length-currencyDecimalPlaces),
-      amount.substr(-currencyDecimalPlaces),
+    oldAmount = [
+      oldAmount.substr(0, oldAmount.length-currencyDecimalPlaces),
+      oldAmount.substr(-currencyDecimalPlaces),
     ].join('.');
 
     confirm = $mdDialog.prompt()
       .title('Change Transaction Amount')
-      .placeholder(amount)
+      .placeholder(oldAmount)
       .ariaLabel(`Transaction Amount (${currencySymbol})`)
-      .initialValue(amount)
+      .initialValue(oldAmount)
       .targetEvent($event)
       .ok('Save')
       .cancel('Cancel');
@@ -108,6 +108,7 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
     $mdDialog.show(confirm).then(function(newValue) {
       let decPlaces = currencyDecimalPlaces;
       let newAmount = newValue;
+      let isDebit = '-' === newAmount[0];
 
       if (newAmount.indexOf('.') === -1) {
         newAmount += '.00';
@@ -119,7 +120,11 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
         newAmount[1].substr(0, decPlaces).padEnd(decPlaces, '0')
       ].join(''));
 
-      changeAmount(transaction.Id, newAmount);
+      if (isDebit) {
+        newAmount = 0 - newAmount;
+      }
+
+      changeAmount(transaction.Id, newAmount, transaction.Amount);
     }, function() {
       // do nothing
     });
@@ -166,14 +171,14 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
     });
   }
 
-  function changeAmount (transactionId, newValue) {
+  function changeAmount (transactionId, newValue, oldValue) {
     if (transaction.Id !== transactionId) {
       return;
     }
 
     $api.apiPutNewValue(`/transaction/${transactionId}/amount`, newValue)
       .then(function (res) {
-        updateTransactionAmount(newValue);
+        updateTransactionAmount(newValue, oldValue);
       })
       .catch(function (err) {
         console.log(err);
@@ -181,10 +186,11 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
       });
   }
 
-  function updateTransactionAmount (newValue) {
+  function updateTransactionAmount (newValue, oldValue) {
     $scope.$apply(function () {
       transaction.Amount = newValue;
     });
+    $scope.$emit(`logbook:transaction`, logbook.Id, newValue, oldValue);
   }
 
   function changeOccurred (transactionId, newValue) {

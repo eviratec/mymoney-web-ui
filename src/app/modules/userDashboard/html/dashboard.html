@@ -1,4 +1,5 @@
-<div layout="row"
+<div id="UserDashboard"
+  layout="row"
   flex>
 
   <div class="user-dashboard"
@@ -25,13 +26,20 @@
             <md-card-header ui-sref="app.user.logbookPage({ logbookId: logbook.Id })">
               <md-card-avatar>
                 <md-icon class="material-icons">
-                  webui
+                  account_balance_wallet
                 </md-icon>
               </md-card-avatar>
-              <md-card-header-text>
+              <md-card-header-text flex>
                 <span class="md-title">{{ logbook.Name }}</span>
-                <span class="md-subhead">MyMoney Logbook</span>
+                <span class="md-subhead">&nbsp;</span>
               </md-card-header-text>
+              <span class="logbook-balance-currency-symbol">
+                {{ logbook.Balance > -1 ? 'CR' : 'DR' }}
+                {{ currencySymbols[logbook.Currency] }}
+              </span>
+              <span class="logbook-balance">
+                {{ abs(logbook.Balance) / pow(10, currencyDecimalPlaces[logbook.Currency]) | currency : '' : 2 }}
+              </span>
             </md-card-header>
             <md-divider></md-divider>
             <md-card-actions layout="row"
