@@ -13740,23 +13740,29 @@ md-content.ds-main-content {
   margin-bottom: 16px; }
   #LogbookPage section.transactions footer {
     padding: 16px; }
-  #LogbookPage section.transactions ul.transactions {
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
+  #LogbookPage section.transactions ul.logbook-days {
     list-style-type: none;
     margin: 0;
-    padding: 0;
-    background-color: rgba(255, 255, 255, 0.5); }
-    #LogbookPage section.transactions ul.transactions li {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-      #LogbookPage section.transactions ul.transactions li a {
-        line-height: 64px;
-        padding: 0 24px;
-        color: rgba(0, 0, 0, 0.87);
-        text-decoration: none; }
-        #LogbookPage section.transactions ul.transactions li a md-icon {
-          margin-right: 24px; }
-        #LogbookPage section.transactions ul.transactions li a span.transaction-title {
-          text-decoration: underline; }
+    padding: 0; }
+    #LogbookPage section.transactions ul.logbook-days div.md-subheader {
+      background-color: #eee; }
+    #LogbookPage section.transactions ul.logbook-days ul.transactions {
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      background-color: rgba(255, 255, 255, 0.5); }
+      #LogbookPage section.transactions ul.logbook-days ul.transactions li {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li a {
+          line-height: 64px;
+          padding: 0 24px;
+          color: rgba(0, 0, 0, 0.87);
+          text-decoration: none; }
+          #LogbookPage section.transactions ul.logbook-days ul.transactions li a md-icon {
+            margin-right: 24px; }
+          #LogbookPage section.transactions ul.logbook-days ul.transactions li a span.transaction-title {
+            text-decoration: underline; }
 
 /**
  * Copyright (c) 2019 Callan Peter Milne
