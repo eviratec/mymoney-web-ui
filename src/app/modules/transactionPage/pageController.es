@@ -224,6 +224,7 @@ function TransactionPageController (  $api,   $scope,   $state,   $mdDialog,   $
 
     $api.apiDelete(`/transaction/${transactionId}`)
       .then(function (res) {
+        $scope.$emit(`logbook:transaction`, logbook.Id, 0, transaction.Amount);
         navToParent();
       })
       .catch(function (err) {

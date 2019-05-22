@@ -200,6 +200,7 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
         $timeout(function () {
           Object.assign(newTransaction, res.data);
           newTransaction.Id = res.data.Id;
+          $scope.$emit(`logbook:transaction`, logbook.Id, amount, 0);
         });
       })
       .catch(function (err) {
