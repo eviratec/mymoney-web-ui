@@ -6,13 +6,27 @@
     flex>
 
     <!-- Logbook Header -->
-    <md-toolbar class="page-header">
+    <md-toolbar class="page-header md-sticky">
       <div class="md-toolbar-tools">
 
         <!-- Logbook Title -->
         <h1>{{ $logbookPage.logbook.Name }}</h1>
 
         <span flex></span>
+
+        <!-- Create A New Transaction Button -->
+        <md-button class="md-raised md-primary create-transaction-button"
+          ng-click="$logbookPage.createTransaction()">
+
+          <!-- Icon -->
+          <md-icon class="material-icons">
+            add
+          </md-icon>
+
+          <!-- Text -->
+          <span>Entry</span>
+
+        </md-button>
 
         <md-menu class="logbook-tools">
           <!-- trigger -->
@@ -54,26 +68,43 @@
         <ul class="logbook-days">
 
           <!-- Day -->
-          <li ng-repeat="day in $logbookPage.days | orderBy: 'date'">
+          <li ng-repeat="day in $logbookPage.days | orderBy: '-date'">
             <md-subheader>
-              {{ day.date }}
+              <span>{{ day.date }}</span>
             </md-subheader>
 
             <!-- Logbook Transactions -->
             <ul class="transactions">
 
               <!-- Transaction -->
-              <li ng-repeat="transaction in day.transactions | orderBy: 'Occurred'">
+              <li ng-repeat="transaction in day.transactions | orderBy: '-Occurred'"
+                ng-class="{'credit-transaction': transaction.Amount > -1, 'debit-transaction': transaction.Amount < 0}">
                 <a ui-sref="app.user.transactionPage({ transactionId: transaction.Id })"
                   layout="row">
                   <span class="transaction-title">{{ transaction.Summary }}</span>
                   <span flex></span>
                   <span class="transaction-currency-symbol">{{ $logbookPage.currencySymbol }}</span>
-                  <span class="transaction-amount">{{ transaction.Amount / $logbookPage.currencyAmountMultiplier }}</span>
+                  <span class="transaction-amount">{{ $logbookPage.abs(transaction.Amount / $logbookPage.currencyAmountMultiplier) }}</span>
+                  <span class="transaction-type">{{ transaction.Amount > -1 ? 'CR' : 'DR' }}</span>
                 </a>
               </li>
 
             </ul>
+
+            <footer layout="row"
+              ng-class="{'credit-day': day.total > -1, 'debit-day': day.total < 0}">
+              <span class="total-row-label">Total</span>
+              <span flex></span>
+              <span class="logbook-currency-symbol">
+                {{ $logbookPage.currencySymbol }}
+              </span>
+              <span class="logbook-total">
+                {{ $logbookPage.abs(day.total / $logbookPage.currencyAmountMultiplier) }}
+              </span>
+              <span class="logbook-total-type">
+                {{ day.total > -1 ? 'CR' : 'DR' }}
+              </span>
+            </footer>
           </li>
 
         </ul>

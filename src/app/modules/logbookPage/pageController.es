@@ -60,6 +60,8 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
     navToUserDashboard();
   }
 
+  $logbookPage.abs = Math.abs;
+
   $logbookPage.createTransaction = function ($event) {
 
     let createTransactionDialog = {
@@ -239,10 +241,25 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
     }
 
     logbookDay.transactions.push(transaction);
+    recalcLogbookDayTotal(logbookDay);
+  }
+
+  function recalcLogbookDayTotal (logbookDay) {
+    let newTotal = 0;
+    logbookDay.transactions.forEach(transaction => {
+      newTotal += transaction.Amount;
+    });
+    logbookDay.total = newTotal;
   }
 
   function getTransactionDayDate (transaction) {
-    return (new Date(transaction.Occurred*1000)).toJSON().split('T')[0];
+    let date = new Date(transaction.Occurred*1000);
+
+    return [
+      date.getFullYear(),
+      (date.getMonth()+1).toString().padStart(2, '0'),
+      date.getDate().toString().padStart(2, '0')
+    ].join('-');
   }
 
   function initLogbookDays () {
@@ -250,6 +267,7 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
   }
 
   function addLogbookDay (date) {
+    let total = 0;
     let transactions = [];
     let logbookDay = {};
 
@@ -257,6 +275,11 @@ function LogbookPageController (  $api,   $scope,   $state,   $mdDialog,   $time
       date: {
         value: date,
         enumerable: true,
+      },
+      total: {
+        value: total,
+        enumerable: true,
+        writable: true,
       },
       transactions: {
         value: transactions,
