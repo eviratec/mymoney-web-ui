@@ -1,9 +1,16 @@
-<div id="login" layout="column" layout-fill layout-align="center center">
-  <div class="login-form form-wrapper" layout="column" md-whiteframe="12dp">
+<div id="login"
+  layout="column"
+  layout-align="center center"
+  layout-fill>
+  <div class="login-form form-wrapper"
+    layout="column"
+    md-whiteframe="12dp">
 
-    <header layout="row" layout-align="start center">
+    <header layout="row"
+      layout-align="start center">
 
-      <img src="logo.png" class="app-logo" />
+      <img class="app-logo"
+        src="logo.png" />
 
       <div flex layout="column">
         <span class="md-headline">MyMoney</span>
@@ -26,30 +33,49 @@
 
         <md-input-container>
           <label>Username / Email</label>
-          <input ng-model="credentials.Login" required ng-minlength="5" />
+          <input ng-model="credentials.Login"
+            ng-minlength="5"
+            required />
         </md-input-container>
 
         <md-input-container>
           <label>Password</label>
-          <input ng-model="credentials.Password" type="password" required ng-minlength="7" />
+          <input ng-model="credentials.Password"
+            type="password"
+            ng-minlength="7"
+            required />
         </md-input-container>
 
       </md-content>
 
-      <div class="submit-row" layout="row" layout-align="end center">
+      <div class="submit-row"
+        layout="row"
+        layout-align="end center">
         <!-- <a class="md-button" href="#">Forgot Password</a> -->
-        <md-button class="md-primary md-raised" type="submit">
+        <md-button class="md-primary md-raised"
+          type="submit">
           Login
         </md-button>
       </div>
 
+      <md-progress-linear md-mode="indeterminate"
+        ng-if="showProgress"></md-progress-linear>
+
     </form>
 
   </div>
-  <div class="new-user-banner" layout="row" layout-align="start center" md-whiteframe="12dp">
+  <div class="new-user-banner"
+    layout="row"
+    layout-align="start center"
+    md-whiteframe="12dp">
     <strong>New, here?</strong>
     <span>It's free to signup</span>
+
     <span flex></span>
-    <a class="md-button" ui-sref="app.anon.signup">Sign-up</a>
+
+    <a class="md-button"
+      ui-sref="app.anon.signup">
+      Sign-up
+    </a>
   </div>
 </div>

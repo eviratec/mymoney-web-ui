@@ -22,6 +22,8 @@ function LoginController (  $scope,   $auth,   $state,   $mdDialog,   $login,   
 
   $scope.error = '';
 
+  $scope.showProgress = false;
+
   $scope.credentials = {
     Login: '',
     Password: '',
@@ -31,7 +33,7 @@ function LoginController (  $scope,   $auth,   $state,   $mdDialog,   $login,   
 
     $ev.preventDefault();
 
-    console.log($ev);
+    showProgressBar();
 
     let login = $scope.credentials.Login;
     let password = $scope.credentials.Password;
@@ -46,22 +48,36 @@ function LoginController (  $scope,   $auth,   $state,   $mdDialog,   $login,   
            errorMsg = err.data.ErrorMsg;
         }
 
+        hideProgressBar();
+
+        if (!errorMsg) {
+          return;
+        }
+
         $mdDialog.show(
           $mdDialog.alert()
             .parent(angular.element(document.body))
             .clickOutsideToClose(true)
             .title('Login failed')
-            .textContent(errorMsg)
+            .textContent('Invalid username/password combination')
             .ariaLabel('Login error dialog')
             .ok('Got it!')
             .targetEvent($ev)
         );
 
         $timeout(function () {
-          $scope.error = errorMsg[2];
+          $scope.error = 'Invalid username/password combination';
         });
       });
 
   };
+
+  function showProgressBar () {
+    $scope.showProgress = true;
+  }
+
+  function hideProgressBar () {
+    $scope.showProgress = false;
+  }
 
 };
