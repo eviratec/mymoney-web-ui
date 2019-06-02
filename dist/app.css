@@ -13855,6 +13855,10 @@ md-content.ds-main-content {
   background-color: rgba(0, 0, 0, 0.2);
   color: white; }
 
+#root md-progress-linear.root-progress-bar {
+  position: absolute;
+  z-index: 10; }
+
 /**
  * Copyright (c) 2019 Callan Peter Milne
  *
