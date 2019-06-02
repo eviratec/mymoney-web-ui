@@ -28,6 +28,33 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
   class DsApi {
     constructor () {
       this.url = $appEnvironment.config.apiUrl;
+      this.listeners = {};
+    }
+    on (eventName, fn) {
+      initListener(this, eventName);
+      this.listeners[eventName].push(fn);
+    }
+    off (eventName, fn) {
+      let index;
+
+      if (!Object.keys(this.listeners).includes(eventName)) {
+        return;
+      }
+
+      index = this.listeners[eventName].indexOf(fn);
+      this.listeners[eventName].splice(index, 1);
+    }
+    emit (eventName) {
+      let args;
+      if (!Object.keys(this.listeners).includes(eventName)) {
+        return;
+      }
+
+      args = [...arguments];
+
+      this.listeners[eventName].forEach(fn => {
+        fn(args.slice(1))
+      });
     }
     apiGet (url) {
       let dsApi = this;
@@ -45,7 +72,14 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
           opts.headers['Authorization'] = getAuthorization();
         }
 
-        $http(opts).then(resolve, reject);
+        emitRequestStart(dsApi);
+
+        $http(opts).then(onComplete, reject);
+
+        function onComplete () {
+          emitRequestEnd(dsApi);
+          resolve(...arguments);
+        }
       });
     }
     apiPost (url, d) {
@@ -68,7 +102,14 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
           opts.data = JSON.stringify(d);
         }
 
-        $http(opts).then(resolve, reject);
+        emitRequestStart(dsApi);
+
+        $http(opts).then(onComplete, reject);
+
+        function onComplete () {
+          emitRequestEnd(dsApi);
+          resolve(...arguments);
+        }
       });
     }
     apiPutNewValue (url, newValue) {
@@ -91,7 +132,14 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
           newValue: newValue,
         });
 
-        $http(opts).then(resolve, reject);
+        emitRequestStart(dsApi);
+
+        $http(opts).then(onComplete, reject);
+
+        function onComplete () {
+          emitRequestEnd(dsApi);
+          resolve(...arguments);
+        }
       });
     }
     apiDelete (url) {
@@ -110,8 +158,34 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
           opts.headers['Authorization'] = getAuthorization();
         }
 
-        $http(opts).then(resolve, reject);
+        emitRequestStart(dsApi);
+
+        $http(opts).then(onComplete, reject);
+
+        function onComplete () {
+          emitRequestEnd(dsApi);
+          resolve(...arguments);
+        }
       });
+    }
+    watchApiProgress (scope, varName) {
+      hideProgressIndicator();
+
+      this.on('$apiRequest:start', function () {
+        showProgressIndicator();
+      });
+
+      this.on('$apiRequest:end', function () {
+        hideProgressIndicator();
+      });
+
+      function showProgressIndicator () {
+        scope[varName] = true;
+      }
+
+      function hideProgressIndicator () {
+        scope[varName] = false;
+      }
     }
   }
 
@@ -120,8 +194,24 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
   function hasAuthorization () {
     return $auth.isAuthorized;
   }
+
   function getAuthorization () {
     return $auth.authorization;
   }
 
+  function emitRequestStart ($api) {
+    $api.emit('$apiRequest:start');
+  }
+
+  function emitRequestEnd ($api) {
+    $api.emit('$apiRequest:end');
+  }
+
+  function initListener ($api, eventName) {
+    if (Object.keys($api.listeners).includes(eventName)) {
+      return;
+    }
+
+    $api.listeners[eventName] = [];
+  }
 }
