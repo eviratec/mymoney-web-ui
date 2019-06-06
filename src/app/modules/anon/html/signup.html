@@ -61,24 +61,37 @@
           </div>
         </md-input-container>
 
-        <div>
-          <md-checkbox
+        <md-input-container>
+          <md-checkbox name="touAccepted"
             ng-model="touAccepted"
             aria-label="I have read and agree to the Terms of Use and Privacy Policy"
             ng-true-value="true"
             ng-false-value="false"
-            class="md-align-top-left" flex>
+            class="md-align-top-left"
+            required
+            flex>
             I have read and agree to the
             <a href ng-click="showLegal($event, 'termsOfUse')">Terms of Use</a>
             and
             <a href ng-click="showLegal($event, 'privacyPolicy')">Privacy Policy</a>
           </md-checkbox>
-        </div>
+          <div ng-messages="signupForm.touAccepted.$error"
+            md-auto-hide="true">
+            <div ng-message="required">
+              You must agree to the Terms of Service and Privacy Policy before
+              you can create an account
+            </div>
+          </div>
+        </md-input-container>
 
       </md-content>
 
       <div class="submit-row" layout="row" layout-align="end center">
-        <md-button class="md-primary md-raised" type="submit" ng-disabled="!touAccepted || submitDisabled">
+        <a class="md-button"
+          ui-sref="app.anon.login">
+          Back
+        </a>
+        <md-button class="md-primary md-raised" type="submit">
           Create my account
         </md-button>
       </div>

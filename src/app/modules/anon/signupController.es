@@ -27,6 +27,8 @@ function SignupController (  $state,   $scope,   $signup,   $timeout,   $mdDialo
 
   $scope.showProgress = false;
 
+  $scope.touAccepted = false;
+
   $scope.newUser = {
     EmailAddress: '',
     Password: '',
@@ -36,11 +38,15 @@ function SignupController (  $state,   $scope,   $signup,   $timeout,   $mdDialo
 
   enableSignup();
 
+  $scope.back = function ($ev) {
+    $ev.preventDefault();
+  }
+
   function notifyFormInvalid () {
     $mdDialog.show(
       $mdDialog.alert()
-        .title('Error')
-        .textContent('Please complete all form fields correctly')
+        .title('Please fill in all fields')
+        .textContent('Please complete all form fields correctly.')
         .ariaLabel('Error notification')
         .ok('Ok')
     );
