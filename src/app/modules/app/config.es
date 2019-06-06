@@ -58,18 +58,18 @@ function appDefaultRoute (  $urlRouterProvider) {
 appThemes.$inject = ['$mdThemingProvider'];
 function appThemes (  $mdThemingProvider) {
 
-  let dsPurpleMap;
+  let dsLightBlueMap;
   let sidebarBlueGreyMap;
 
-  dsPurpleMap = $mdThemingProvider.extendPalette('light-blue', {
-    // '800': '#8E24AA',
+  dsLightBlueMap = $mdThemingProvider.extendPalette('light-blue', {
     'contrastDefaultColor': 'light'
   });
 
-  $mdThemingProvider.definePalette('dsPurple', dsPurpleMap);
+  $mdThemingProvider.definePalette('dsLightBlue', dsLightBlueMap);
 
   $mdThemingProvider.theme('default')
-    .primaryPalette('dsPurple');
+    .primaryPalette('dsLightBlue')
+    .dark();
 
   sidebarBlueGreyMap = $mdThemingProvider.extendPalette('blue-grey', {
     // 'contrastDefaultColor': 'dark',
@@ -78,7 +78,7 @@ function appThemes (  $mdThemingProvider) {
   $mdThemingProvider.definePalette('sidebarBlueGrey', sidebarBlueGreyMap);
 
   $mdThemingProvider.theme('darknav')
-    .primaryPalette('dsPurple')
+    .primaryPalette('dsLightBlue')
     .dark();
 
   $mdThemingProvider.theme('sidenavTheme')

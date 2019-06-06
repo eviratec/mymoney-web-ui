@@ -47,7 +47,7 @@
 body, html {
   font-size: 14.4px;
   font-family: "Roboto", sans-serif;
-  background-color: #37474F;
+  background-color: #242424;
 }
 
 
@@ -55,9 +55,28 @@ body, md-content.md-blue-grey-theme {
   background-color: #eee;
 }
 
+md-content.ds-main-content md-card.md-default-theme, md-card {
+  background-color: rgb(51,51,51);
+}
+
+#Dialog_TermsOfUse a,
+#Dialog_PrivacyPolicy a, {
+  color: #00B0FF;
+}
+
 md-toolbar:not(.md-hue-1),
 .md-fab {
   fill: #fff;
+}
+
+md-input-container.md-input-invalid .md-input {
+  border-color: #FF7043;
+}
+md-input-container.md-default-theme.md-input-invalid .md-input,
+md-input-container.md-input-invalid label,
+md-input-container.md-input-invalid label::after,
+md-input-container.md-input-invalid .md-input-message-animation {
+  color: #FF7043;
 }
 
 md-sidenav.md-sidenav-left.md-sidenavTheme-theme {
@@ -129,7 +148,7 @@ md-toolbar#userToolbar h3 {
   color: rgba(255,255,255,0.5);
 }
 md-content.ds-main-content {
-  background-color: #eee;
+  background-color: #242424;
   .md-subheader.md-default-theme,
   .md-subheader {
     background-color: transparent;
@@ -155,5 +174,5 @@ md-content.ds-main-content {
   margin: 8px;
   border: 2px dashed;
   border-radius: 3px;
-  border-color: rgba(0,0,0,0.12);
+  border-color: rgba(255,255,255, 0.12);
 }

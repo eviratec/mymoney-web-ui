@@ -15,7 +15,10 @@
  */
 
 #signup {
-  background: #eee;
+  background: #242424;
+}
+#signup a {
+  color: #00B0FF;
 }
 
 #signup div.signup-form.form-wrapper header span.md-headline,
@@ -31,7 +34,7 @@
 }
 #signup div.signup-form.form-wrapper {
   width: 400px;
-  background-color: #fff;
+  background-color: #424242;
   border-radius: 2px;
 }
 #signup div.signup-form.form-wrapper header img.app-logo {
@@ -43,7 +46,7 @@
   padding: 32px 24px 24px;
 }
 #signup div.signup-form.form-wrapper md-content {
-  background-color: #fff;
+  background-color: #424242;
   padding: 24px;
 }
 #signup div.signup-form.form-wrapper md-content .new-user-notice {
