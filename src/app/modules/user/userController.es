@@ -69,6 +69,7 @@ function UserController (  $api,   $scope,   $rootScope,   $auth,   $state,   $m
         $timeout(function () {
           Object.assign(newLogbook, res.data);
           newLogbook.Id = res.data.Id;
+          newLogbook.Balance = 0;
         });
       })
       .catch(function (err) {
