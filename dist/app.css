@@ -29,7 +29,10 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 #signup {
-  background: #eee; }
+  background: #242424; }
+
+#signup a {
+  color: #00B0FF; }
 
 #signup div.signup-form.form-wrapper header span.md-headline,
 #signup div.signup-form.form-wrapper header span.md-subhead {
@@ -44,7 +47,7 @@
 
 #signup div.signup-form.form-wrapper {
   width: 400px;
-  background-color: #fff;
+  background-color: #424242;
   border-radius: 2px; }
 
 #signup div.signup-form.form-wrapper header img.app-logo {
@@ -56,7 +59,7 @@
   padding: 32px 24px 24px; }
 
 #signup div.signup-form.form-wrapper md-content {
-  background-color: #fff;
+  background-color: #424242;
   padding: 24px; }
 
 #signup div.signup-form.form-wrapper md-content .new-user-notice {
@@ -86,17 +89,18 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 #login {
-  background: #eee; }
+  background: #242424; }
   #login .login-error {
     text-align: left;
     margin: 0 24px;
-    color: #F44336; }
+    color: #FF5722; }
   #login .new-user-banner {
     background-color: #e65100;
     color: rgba(255, 255, 255, 0.7);
     width: 400px;
     margin-bottom: 24px;
-    padding: 0 0 0 32px; }
+    padding: 0 0 0 32px;
+    border-radius: 0 0 2px 2px; }
   #login .new-user-banner strong {
     margin-right: 8px;
     color: white; }
@@ -110,7 +114,7 @@
     text-transform: upper-case; }
   #login div.login-form.form-wrapper {
     width: 400px;
-    background-color: #fff;
+    background-color: #424242;
     border-radius: 2px; }
   #login div.login-form.form-wrapper header img.app-logo {
     width: 48px;
@@ -119,7 +123,7 @@
   #login div.login-form.form-wrapper header {
     padding: 32px 24px 24px; }
   #login div.login-form.form-wrapper md-content {
-    background-color: #fff;
+    background-color: #424242;
     padding: 24px; }
   #login div.login-form.form-wrapper md-content .new-user-notice {
     background-color: #eee;
@@ -13631,14 +13635,30 @@ md-toolbar {
 body, html {
   font-size: 14.4px;
   font-family: "Roboto", sans-serif;
-  background-color: #37474F; }
+  background-color: #242424; }
 
 body, md-content.md-blue-grey-theme {
   background-color: #eee; }
 
+md-content.ds-main-content md-card.md-default-theme, md-card {
+  background-color: #333333; }
+
+#Dialog_TermsOfUse a,
+#Dialog_PrivacyPolicy a {
+  color: #00B0FF; }
+
 md-toolbar:not(.md-hue-1),
 .md-fab {
   fill: #fff; }
+
+md-input-container.md-input-invalid .md-input {
+  border-color: #FF7043; }
+
+md-input-container.md-default-theme.md-input-invalid .md-input,
+md-input-container.md-input-invalid label,
+md-input-container.md-input-invalid label::after,
+md-input-container.md-input-invalid .md-input-message-animation {
+  color: #FF7043; }
 
 md-sidenav.md-sidenav-left.md-sidenavTheme-theme, md-sidenav.md-sidenavTheme-theme {
   color: white;
@@ -13695,7 +13715,7 @@ md-toolbar#userToolbar h3 {
   color: rgba(255, 255, 255, 0.5); }
 
 md-content.ds-main-content {
-  background-color: #eee; }
+  background-color: #242424; }
   md-content.ds-main-content .md-subheader.md-default-theme,
   md-content.ds-main-content .md-subheader {
     background-color: transparent; }
@@ -13716,7 +13736,125 @@ md-content.ds-main-content {
   margin: 8px;
   border: 2px dashed;
   border-radius: 3px;
-  border-color: rgba(0, 0, 0, 0.12); }
+  border-color: rgba(255, 255, 255, 0.12); }
+
+/**
+ * Copyright (c) 2019 Callan Peter Milne
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+#LogbookPage md-toolbar.page-header {
+  background-color: #222; }
+  #LogbookPage md-toolbar.page-header h1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%; }
+  #LogbookPage md-toolbar.page-header button.md-button.create-transaction-button {
+    min-width: 100px; }
+
+#LogbookPage section.transactions {
+  margin-bottom: 16px; }
+  #LogbookPage section.transactions footer {
+    padding: 16px; }
+  #LogbookPage section.transactions ul.logbook-days {
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+    #LogbookPage section.transactions ul.logbook-days div.md-subheader {
+      background-color: #242424; }
+    #LogbookPage section.transactions ul.logbook-days footer {
+      background-color: #333333;
+      border-bottom: 2px solid #424242;
+      font-weight: 500;
+      margin-bottom: 0.5em; }
+      #LogbookPage section.transactions ul.logbook-days footer span.total-row-label {
+        color: rgba(255, 255, 255, 0.5); }
+      #LogbookPage section.transactions ul.logbook-days footer span.logbook-currency-symbol,
+      #LogbookPage section.transactions ul.logbook-days footer span.logbook-total,
+      #LogbookPage section.transactions ul.logbook-days footer span.logbook-total-type {
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500; }
+      #LogbookPage section.transactions ul.logbook-days footer span.logbook-total-type {
+        margin-left: 8px; }
+    #LogbookPage section.transactions ul.logbook-days ul.transactions {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      background-color: #424242; }
+      #LogbookPage section.transactions ul.logbook-days ul.transactions li {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li.debit-transaction a span.transaction-amount,
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li.debit-transaction a span.transaction-currency-symbol,
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li.debit-transaction a span.transaction-type {
+          color: #FF7043; }
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li.debit-transaction a span.transaction-type {
+          margin-left: 8px; }
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li.credit-transaction a span.transaction-amount,
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li.credit-transaction a span.transaction-currency-symbol,
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li.credit-transaction a span.transaction-type {
+          color: #7CB342; }
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li.credit-transaction a span.transaction-type {
+          margin-left: 8px; }
+        #LogbookPage section.transactions ul.logbook-days ul.transactions li a {
+          line-height: 1.75em;
+          padding: 12px 16px;
+          color: white;
+          text-decoration: none; }
+          #LogbookPage section.transactions ul.logbook-days ul.transactions li a md-icon {
+            margin-right: 24px; }
+          #LogbookPage section.transactions ul.logbook-days ul.transactions li a span.transaction-title {
+            text-decoration: underline; }
+
+/**
+ * Copyright (c) 2019 Callan Peter Milne
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+#TransactionPage md-toolbar.page-header {
+  background-color: #222; }
+  #TransactionPage md-toolbar.page-header h1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%; }
+
+#TransactionPage section#NoTransactionDetails .add-details {
+  margin: 8px; }
+  #TransactionPage section#NoTransactionDetails .add-details span.placeholder-text {
+    font-size: 1.4em;
+    margin: 16px 0;
+    color: rgba(255, 255, 255, 0.5); }
+
+#TransactionPage section.transaction {
+  margin-bottom: 16px; }
+  #TransactionPage section.transaction header {
+    padding: 16px; }
+    #TransactionPage section.transaction header h2 {
+      margin: 0;
+      font-size: 1.2em;
+      font-weight: 400; }
 
 /**
  * Copyright (c) 2019 Callan Peter Milne
@@ -13761,124 +13899,6 @@ md-content.ds-main-content {
 #root md-progress-linear.root-progress-bar {
   position: absolute;
   z-index: 10; }
-
-/**
- * Copyright (c) 2019 Callan Peter Milne
- *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
- * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
- * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
- * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
- * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-#LogbookPage md-toolbar.page-header {
-  background-color: #222; }
-  #LogbookPage md-toolbar.page-header h1 {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 50%; }
-  #LogbookPage md-toolbar.page-header button.md-button.create-transaction-button {
-    min-width: 100px; }
-
-#LogbookPage section.transactions {
-  margin-bottom: 16px; }
-  #LogbookPage section.transactions footer {
-    padding: 16px; }
-  #LogbookPage section.transactions ul.logbook-days {
-    list-style-type: none;
-    margin: 0;
-    padding: 0; }
-    #LogbookPage section.transactions ul.logbook-days div.md-subheader {
-      background-color: #eee; }
-    #LogbookPage section.transactions ul.logbook-days footer {
-      background-color: #f5f5f5;
-      border-bottom: 2px solid #ddd;
-      font-weight: 500;
-      margin-bottom: 0.5em; }
-      #LogbookPage section.transactions ul.logbook-days footer span.total-row-label {
-        color: rgba(0, 0, 0, 0.87); }
-      #LogbookPage section.transactions ul.logbook-days footer span.logbook-currency-symbol,
-      #LogbookPage section.transactions ul.logbook-days footer span.logbook-total,
-      #LogbookPage section.transactions ul.logbook-days footer span.logbook-total-type {
-        color: rgba(0, 0, 0, 0.87);
-        font-weight: 500; }
-      #LogbookPage section.transactions ul.logbook-days footer span.logbook-total-type {
-        margin-left: 8px; }
-    #LogbookPage section.transactions ul.logbook-days ul.transactions {
-      border-top: 1px solid rgba(0, 0, 0, 0.12);
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      background-color: rgba(255, 255, 255, 0.5); }
-      #LogbookPage section.transactions ul.logbook-days ul.transactions li {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-        #LogbookPage section.transactions ul.logbook-days ul.transactions li.debit-transaction a span.transaction-amount,
-        #LogbookPage section.transactions ul.logbook-days ul.transactions li.debit-transaction a span.transaction-currency-symbol,
-        #LogbookPage section.transactions ul.logbook-days ul.transactions li.debit-transaction a span.transaction-type {
-          color: #7c0000; }
-        #LogbookPage section.transactions ul.logbook-days ul.transactions li.debit-transaction a span.transaction-type {
-          margin-left: 8px; }
-        #LogbookPage section.transactions ul.logbook-days ul.transactions li.credit-transaction a span.transaction-amount,
-        #LogbookPage section.transactions ul.logbook-days ul.transactions li.credit-transaction a span.transaction-currency-symbol,
-        #LogbookPage section.transactions ul.logbook-days ul.transactions li.credit-transaction a span.transaction-type {
-          color: #007c00; }
-        #LogbookPage section.transactions ul.logbook-days ul.transactions li.credit-transaction a span.transaction-type {
-          margin-left: 8px; }
-        #LogbookPage section.transactions ul.logbook-days ul.transactions li a {
-          line-height: 1.75em;
-          padding: 12px 16px;
-          color: rgba(0, 0, 0, 0.87);
-          text-decoration: none; }
-          #LogbookPage section.transactions ul.logbook-days ul.transactions li a md-icon {
-            margin-right: 24px; }
-          #LogbookPage section.transactions ul.logbook-days ul.transactions li a span.transaction-title {
-            text-decoration: underline; }
-
-/**
- * Copyright (c) 2019 Callan Peter Milne
- *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
- * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
- * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
- * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
- * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-#TransactionPage md-toolbar.page-header {
-  background-color: #222; }
-  #TransactionPage md-toolbar.page-header h1 {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 50%; }
-
-#TransactionPage section#NoTransactionDetails .add-details {
-  margin: 8px; }
-  #TransactionPage section#NoTransactionDetails .add-details span.placeholder-text {
-    font-size: 1.4em;
-    margin: 16px 0;
-    color: rgba(0, 0, 0, 0.37); }
-
-#TransactionPage section.transaction {
-  margin-bottom: 16px; }
-  #TransactionPage section.transaction header {
-    padding: 16px; }
-    #TransactionPage section.transaction header h2 {
-      margin: 0;
-      font-size: 1.2em;
-      font-weight: 400; }
 
 /*!
  * AngularJS Material Design
