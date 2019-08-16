@@ -81,9 +81,16 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
           resolve(...arguments);
         }
 
-        function wait1SecondAndRetry () {
+        function wait1SecondAndRetry (res) {
+          if (res.status && 400 === res.status) {
+            emitRequestEnd(dsApi);
+            return reject(res);
+          }
+
           setTimeout(function () {
-            dsApi.apiGet(url).then(onComplete);
+            dsApi.apiGet(url)
+              .then(onComplete)
+              .catch(wait1SecondAndRetry);
           }, 1000);
         }
       });
@@ -117,9 +124,16 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
           resolve(...arguments);
         }
 
-        function wait1SecondAndRetry () {
+        function wait1SecondAndRetry (res) {
+          if (res.status && 400 === res.status) {
+            emitRequestEnd(dsApi);
+            return reject(res);
+          }
+
           setTimeout(function () {
-            dsApi.apiPost(url, d).then(onComplete);
+            dsApi.apiPost(url, d)
+              .then(onComplete)
+              .catch(wait1SecondAndRetry);
           }, 1000);
         }
       });
@@ -153,9 +167,16 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
           resolve(...arguments);
         }
 
-        function wait1SecondAndRetry () {
+        function wait1SecondAndRetry (res) {
+          if (res.status && 400 === res.status) {
+            emitRequestEnd(dsApi);
+            return reject(res);
+          }
+
           setTimeout(function () {
-            dsApi.apiPutNewValue(url, newValue).then(onComplete);
+            dsApi.apiPutNewValue(url, newValue)
+              .then(onComplete)
+              .catch(wait1SecondAndRetry);
           }, 1000);
         }
       });
@@ -185,9 +206,16 @@ function dsApiFactory (  $auth,   $appEnvironment,   $http) {
           resolve(...arguments);
         }
 
-        function wait1SecondAndRetry () {
+        function wait1SecondAndRetry (res) {
+          if (res.status && 400 === res.status) {
+            emitRequestEnd(dsApi);
+            return reject(res);
+          }
+
           setTimeout(function () {
-            dsApi.apiDelete(url).then(onComplete);
+            dsApi.apiDelete(url)
+              .then(onComplete)
+              .catch(wait1SecondAndRetry);
           }, 1000);
         }
       });
